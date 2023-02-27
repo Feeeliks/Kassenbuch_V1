@@ -7,7 +7,7 @@
         xmlns:viewModel="clr-namespace:WPF_LoginForm.ViewModels"
         xmlns:customcontrols="clr-namespace:WPF_LoginForm.CustomControls"
         mc:Ignorable="d"
-        Title="LoginView" Height="550" Width="800"
+        Title="LoginView" Height="550" Width="400"
         WindowStartupLocation="CenterScreen"
         Background="Transparent"
         AllowsTransparency="True"
@@ -27,27 +27,28 @@
         <Binding Path="IsViewVisible" Mode="TwoWay" Converter="{StaticResource BooleanToVisibility}"/>
     </Window.Visibility>
 
-    <Border CornerRadius="12">
+    <Border CornerRadius="0">
         <Border.Background>
-            <ImageBrush ImageSource="/Images/DSC_0053.JPG"/>
+            <ImageBrush ImageSource="/Images/DSC_0053.JPG"
+                        Stretch="UniformToFill"/>
         </Border.Background>
 
-        <Border CornerRadius="10"
-            BorderThickness="2"
+        <Border CornerRadius="0"
+            BorderThickness="1"
             Opacity="0.9">
 
             <Border.BorderBrush>
                 <LinearGradientBrush StartPoint="0,0" EndPoint="1,1">
-                    <GradientStop Color="#462AD8" Offset="0"/>
-                    <GradientStop Color="#5858ff" Offset="0.75"/>
-                    <GradientStop Color="#00005d" Offset="1"/>
+                    <GradientStop Color="{StaticResource winBorderColor1}" Offset="0"/>
+                    <GradientStop Color="{StaticResource winBorderColor2}" Offset="0.75"/>
+                    <GradientStop Color="{StaticResource winBorderColor3}" Offset="1"/>
                 </LinearGradientBrush>
             </Border.BorderBrush>
 
             <Border.Background>
                 <LinearGradientBrush StartPoint="0,1" EndPoint="1,0" >
-                    <GradientStop Color="#060531" Offset="0"/>
-                    <GradientStop Color="#1B1448" Offset="1"/>
+                    <GradientStop Color="{StaticResource primaryBackColor1}" Offset="0"/>
+                    <GradientStop Color="{StaticResource primaryBackColor2}" Offset="1"/>
                 </LinearGradientBrush>
             </Border.Background>
 
@@ -62,7 +63,7 @@
                         <ColumnDefinition/>
                         <ColumnDefinition Width="25"/>
                         <ColumnDefinition Width="25"/>
-                        <ColumnDefinition Width="5"/>
+                        <ColumnDefinition Width="3"/>
                     </Grid.ColumnDefinitions>
 
                     <TextBlock Text="LOG IN"
@@ -73,6 +74,7 @@
                                VerticalAlignment="Center"
                                Margin="10,0,0,0"/>
 
+                    <!--
                     <Button x:Name="btnMinimize"
                             BorderThickness="0"
                             Content="-"
@@ -97,8 +99,8 @@
 
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
-                                <Border Width="18" Height="18"
-                                        CornerRadius="9"
+                                <Border Width="14" Height="14"
+                                        CornerRadius="0"
                                         Background="{TemplateBinding Background}">
                                     <ContentPresenter VerticalAlignment="Center"
                                                       HorizontalAlignment="Center"/>
@@ -107,16 +109,20 @@
                         </Button.Template>
 
                     </Button>
+                    -->
 
                     <Button x:Name="btnClose"
                             BorderThickness="0"
-                            Content="x"
+                            Content="×"
                             Foreground="White"
-                            FontSize="12"
+                            FontSize="10"
                             FontFamily="Montserrat"
                             Cursor="Hand"
                             Grid.Column="2"
-                            Click="btnClose_Click">
+                            Click="btnClose_Click"
+                            Padding="0"
+                            HorizontalContentAlignment="Center"
+                            VerticalContentAlignment="Center">
 
                         <Button.Style>
                             <Style TargetType="Button">
@@ -132,8 +138,8 @@
 
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
-                                <Border Width="18" Height="18"
-                                    CornerRadius="9"
+                                <Border Width="16" Height="16"
+                                    CornerRadius="0"
                                     Background="{TemplateBinding Background}">
                                     <ContentPresenter VerticalAlignment="Center"
                                                       HorizontalAlignment="Center"/>
@@ -243,8 +249,8 @@
 
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
-                                <Border Width="150" Height="40"
-                                    CornerRadius="20"
+                                <Border Width="150" Height="35"
+                                    CornerRadius="0"
                                     Background="{TemplateBinding Background}">
                                     <ContentPresenter VerticalAlignment="Center"
                                                       HorizontalAlignment="Center"/>
@@ -252,24 +258,16 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
-                    <StackPanel Orientation="Horizontal"
-                                HorizontalAlignment="Center"
-                                Margin="0,15,0,0">
-
-                        <TextBlock Text="Forgot Passwort?"
-                                    Foreground="Darkgray"
-                                    FontSize="12"
-                                    FontWeight="Medium"
-                                    FontFamily="Montserrat"/>
-
-                        <TextBlock Text="Reset"
-                                    Foreground="White"
-                                    FontSize="12"
-                                    FontWeight="Medium"
-                                    FontFamily="Montserrat"
-                                    Cursor="Hand"
-                                   Margin="8,0,0,0"/>
-                    </StackPanel>
+                    
+                        <TextBlock Text="Passwort vergessen"
+                                   Foreground="White"
+                                   FontSize="12"
+                                   FontWeight="Medium"
+                                   FontFamily="Montserrat"
+                                   Cursor="Hand"
+                                   Margin="0,15,0,0"
+                                   HorizontalAlignment="Center"/>
+                    
 
                 </StackPanel>
             </Grid>

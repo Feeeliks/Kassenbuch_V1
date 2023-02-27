@@ -12,10 +12,13 @@
     <None Remove="Images\BackgroundEraser_20220228_140700894_3.png" />
     <None Remove="Images\DSC_0053.JPG" />
     <None Remove="Images\key-icon.png" />
+    <None Remove="Images\pp.jpg" />
     <None Remove="Images\user-icon.png" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
+    <PackageReference Include="FontAwesome.Sharp" Version="6.2.1" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.117" />
   </ItemGroup>
 
@@ -23,6 +26,7 @@
     <Resource Include="Images\BackgroundEraser_20220228_140700894_3.png" />
     <Resource Include="Images\DSC_0053.JPG" />
     <Resource Include="Images\key-icon.png" />
+    <Resource Include="Images\pp.jpg" />
     <Resource Include="Images\user-icon.png" />
   </ItemGroup>
 

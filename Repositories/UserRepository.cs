@@ -64,7 +64,7 @@ namespace WPF_LoginForm.Repositories
                     {
                         user = new UserModel()
                         {
-                            Id = reader.GetString(0),
+                            Id = reader.GetInt32(0),
                             Username = reader.GetString(1),
                             Password = string.Empty,
                             Name = reader.GetString(3),

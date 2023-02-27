@@ -78,7 +78,15 @@ namespace WPF_LoginForm.ViewModels
             RecoverPasswordCommand = new ViewModelCommand(p => ExecuteRecoverPassCommand("", ""));
         }
 
-        private void ExecuteRecoverPassCommand(string username, string email)
+        private void ExecuteRecoverPassCommand(string username, string email) // TODO: Passwort Reset
+                                                                              // Fügen Sie eine neue Seite oder ein neues Fenster hinzu, auf der / in dem Benutzer ihr Passwort zurücksetzen können.
+                                                                              // Auf dieser Seite sollte ein Formular enthalten sein, in dem Benutzer ihre E-Mail-Adresse eingeben können.
+                                                                              // Sobald das Formular abgeschickt wurde, senden Sie eine E-Mail an die angegebene Adresse mit einem temporären Passwort oder einem Link zum Zurücksetzen des Passworts.
+                                                                              // Speichern Sie das temporäre Passwort in der SQLite-Datenbank für den Benutzer, dessen E-Mail-Adresse angegeben wurde.
+                                                                              // Wenn der Benutzer auf den Link in der E-Mail klickt oder sich mit dem temporären Passwort anmeldet, leiten Sie sie zu einer Seite weiter, auf der sie ihr Passwort ändern können.
+                                                                              // Nach erfolgreicher Änderung des Passworts sollte das temporäre Passwort in der Datenbank gelöscht werden.
+                                                                              // Stellen Sie sicher, dass alle erforderlichen Überprüfungen und Sicherheitsmaßnahmen (z. B. Überprüfung der E-Mail-Adresse, Überprüfung des temporären Passworts usw.) in der Anwendung implementiert sind.
+         
         {
             throw new NotImplementedException();
         }

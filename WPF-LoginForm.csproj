@@ -6,19 +6,30 @@
     <RootNamespace>WPF_LoginForm</RootNamespace>
     <Nullable>enable</Nullable>
     <UseWPF>true</UseWPF>
+    <ApplicationIcon>fussball-_2_.ico</ApplicationIcon>
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="database.db" />
     <None Remove="Images\BackgroundEraser_20220228_140700894_3.png" />
     <None Remove="Images\DSC_0053.JPG" />
     <None Remove="Images\key-icon.png" />
     <None Remove="Images\pp.jpg" />
     <None Remove="Images\user-icon.png" />
+    <None Remove="View\database.db" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="fussball-_2_.ico" />
+    <Content Include="database.db">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Extended.Wpf.Toolkit" Version="4.5.0" />
     <PackageReference Include="FontAwesome.Sharp" Version="6.2.1" />
+    <PackageReference Include="iTextSharp" Version="5.5.13.3" />
     <PackageReference Include="System.Data.SQLite" Version="1.0.117" />
   </ItemGroup>
 
@@ -28,6 +39,21 @@
     <Resource Include="Images\key-icon.png" />
     <Resource Include="Images\pp.jpg" />
     <Resource Include="Images\user-icon.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
   </ItemGroup>
 
 </Project>

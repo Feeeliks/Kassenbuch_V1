@@ -21,13 +21,11 @@ namespace WPF_LoginForm.View.Pages
     /// </summary>
     public partial class MitgliederView : UserControl
     {
-        private HomeViewModel _HomeViewModel;
 
         public MitgliederView()
         {
             InitializeComponent();
-            _HomeViewModel = HomeViewModel.Instance;
-            DataContext = _HomeViewModel;
+            DataContext = new CombinedViewModel();
         }
     }
 }

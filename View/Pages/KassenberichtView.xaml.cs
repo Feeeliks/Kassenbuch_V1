@@ -21,13 +21,11 @@ namespace WPF_LoginForm.View.Pages
     /// </summary>
     public partial class KassenberichtView : UserControl
     {
-        private HomeViewModel _HomeViewModel;
 
         public KassenberichtView()
         {
             InitializeComponent();
-            _HomeViewModel = HomeViewModel.Instance;
-            DataContext = _HomeViewModel;
+            DataContext = new CombinedViewModel();
         }
     }
 }

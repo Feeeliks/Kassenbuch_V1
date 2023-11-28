@@ -4,9 +4,1065 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WPF_LoginForm.View.Pages"
+             xmlns:viewModelPage="clr-namespace:WPF_LoginForm.ViewModels.Pages"
+             d:DataContext="{d:DesignInstance Type=viewModelPage:CombinedViewModel}"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="1250">
+
+    <UserControl.Resources>
+        <ControlTemplate x:Key="ComboBoxToggleButton" TargetType="{x:Type ToggleButton}">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="20" />
+                </Grid.ColumnDefinitions>
+                <Border
+                  x:Name="Border" 
+                  Grid.ColumnSpan="2"
+                  CornerRadius="0"
+                  Background="Transparent"
+                  BorderBrush="#FFABADB3"
+                  BorderThickness="1" />
+                <Border 
+                  Grid.Column="0"
+                  CornerRadius="0" 
+                  Margin="1" 
+                  Background="Transparent" 
+                  BorderBrush="Transparent"
+                  BorderThickness="0,0,1,0" />
+                <Path 
+                  x:Name="Arrow"
+                  Grid.Column="1"     
+                  Fill="#FFABADB3"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  Data="M0,0 L0,2 L4,6 L8,2 L8,0 L4,4 z"
+                />
+            </Grid>
+            <!--<ControlTemplate.Triggers>
+            <Trigger Property="ToggleButton.IsMouseOver" Value="true">
+                <Setter TargetName="Border" Property="Background" Value="#808080" />
+            </Trigger>
+            <Trigger Property="ToggleButton.IsChecked" Value="true">
+                <Setter TargetName="Border" Property="Background" Value="#E0E0E0" />
+            </Trigger>
+            <Trigger Property="IsEnabled" Value="False">
+                <Setter TargetName="Border" Property="Background" Value="#EEEEEE" />
+                <Setter TargetName="Border" Property="BorderBrush" Value="#AAAAAA" />
+                <Setter Property="Foreground" Value="#888888"/>
+                <Setter TargetName="Arrow" Property="Fill" Value="#888888" />
+            </Trigger>
+        </ControlTemplate.Triggers>-->
+        </ControlTemplate>
+
+        <ControlTemplate x:Key="ComboBoxTextBox" TargetType="{x:Type TextBox}">
+            <Border x:Name="PART_ContentHost" Focusable="False" Background="{TemplateBinding Background}" />
+        </ControlTemplate>
+
+        <Style x:Key="{x:Type ComboBox}" TargetType="{x:Type ComboBox}">
+            <Setter Property="SnapsToDevicePixels" Value="true"/>
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
+            <Setter Property="ScrollViewer.CanContentScroll" Value="true"/>
+            <Setter Property="MinWidth" Value="120"/>
+            <Setter Property="MinHeight" Value="20"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ComboBox}">
+                        <Grid>
+                            <ToggleButton 
+                            Name="ToggleButton" 
+                            Template="{StaticResource ComboBoxToggleButton}" 
+                            Grid.Column="2" 
+                            Focusable="false"
+                            IsChecked="{Binding Path=IsDropDownOpen,Mode=TwoWay,RelativeSource={RelativeSource TemplatedParent}}"
+                            ClickMode="Press">
+                            </ToggleButton>
+                            <ContentPresenter Name="ContentSite" IsHitTestVisible="False"  Content="{TemplateBinding SelectionBoxItem}"
+                            ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
+                            ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
+                            Margin="3,3,23,3"
+                            VerticalAlignment="Center"
+                            HorizontalAlignment="Left" />
+                            <TextBox x:Name="PART_EditableTextBox"
+                            Style="{x:Null}" 
+                            Template="{StaticResource ComboBoxTextBox}" 
+                            HorizontalAlignment="Left" 
+                            VerticalAlignment="Center" 
+                            Margin="3,3,23,3"
+                            Focusable="True" 
+                            Background="#5372c6"
+                            Foreground="Green"
+                            Visibility="Hidden"
+                            IsReadOnly="{TemplateBinding IsReadOnly}"/>
+                            <Popup 
+                            Name="Popup"
+                            Placement="Bottom"
+                            IsOpen="{TemplateBinding IsDropDownOpen}"
+                            AllowsTransparency="True" 
+                            Focusable="False"
+                            PopupAnimation="Slide">
+
+                                <Grid Name="DropDown"
+                              SnapsToDevicePixels="True"                
+                              MinWidth="{TemplateBinding ActualWidth}"
+                              MaxHeight="{TemplateBinding MaxDropDownHeight}">
+                                    <Border 
+                                x:Name="DropDownBorder"
+                                Background="#0a0457"
+
+                                BorderThickness="1"
+                                BorderBrush="LightGray"/>
+                                    <ScrollViewer Margin="4,6,4,6" SnapsToDevicePixels="True">
+                                        <StackPanel IsItemsHost="True" KeyboardNavigation.DirectionalNavigation="Contained" />
+                                    </ScrollViewer>
+                                </Grid>
+                            </Popup>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="HasItems" Value="false">
+                                <Setter TargetName="DropDownBorder" Property="MinHeight" Value="95"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="#888888"/>
+                            </Trigger>
+                            <Trigger Property="IsGrouping" Value="true">
+                                <Setter Property="ScrollViewer.CanContentScroll" Value="false"/>
+                            </Trigger>
+                            <Trigger SourceName="Popup" Property="Popup.AllowsTransparency" Value="true">
+                                <Setter TargetName="DropDownBorder" Property="CornerRadius" Value="0"/>
+                                <Setter TargetName="DropDownBorder" Property="Margin" Value="0,2,0,0"/>
+                            </Trigger>
+                            <Trigger Property="IsEditable"  Value="true">
+                                <Setter Property="IsTabStop" Value="false"/>
+                                <Setter TargetName="PART_EditableTextBox" Property="Visibility" Value="Visible"/>
+                                <Setter TargetName="ContentSite" Property="Visibility" Value="Hidden"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+            <Style.Triggers>
+            </Style.Triggers>
+        </Style>
+
+        <!-- SimpleStyles: ComboBoxItem -->
+        <Style x:Key="{x:Type ComboBoxItem}" TargetType="{x:Type ComboBoxItem}">
+            <Setter Property="SnapsToDevicePixels" Value="true"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type ComboBoxItem}">
+                        <Border Name="Border"
+                              Padding="2"
+                              SnapsToDevicePixels="true">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsHighlighted" Value="true">
+                                <Setter TargetName="Border" Property="Background" Value="#9ca8c7"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground" Value="#fff"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </UserControl.Resources>
+
     <Grid>
-            
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="75"/>
+            <RowDefinition/>
+            <RowDefinition Height="1"/>
+            <RowDefinition/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="35"/>
+            <RowDefinition/>
+            <RowDefinition Height="1"/>
+            <RowDefinition/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="35"/>
+            <RowDefinition/>
+
+            <RowDefinition>
+                <RowDefinition.Style>
+                    <Style TargetType="RowDefinition">
+                        <Setter Property="Height" Value="0" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Einstellungen.IsErrorMessageVisible}" Value="True">
+                                <Setter Property="Height" Value="Auto" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </RowDefinition.Style>
+            </RowDefinition>
+
+        </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="14" 
+                   Text="{Binding Einstellungen.ErrorMessage}"
+                   Foreground="#D7596D"
+                   FontSize="12"
+                   FontFamily="Montserrat"
+                   Margin="0,10,0,0"
+                   TextWrapping="Wrap"/>
+
+        <Border Grid.Row="3" BorderThickness="0,1,0,0" BorderBrush="White"/>
+
+        <Border Grid.Row="8" BorderThickness="0,1,0,0" BorderBrush="White"/>
+
+        <Border Grid.Row="13" BorderThickness="0,1,0,0" BorderBrush="White"/>
+
+
+        <Grid Grid.Row="0">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="50"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Kassenprüfung:"
+                       Foreground="White"
+                       FontSize="15"
+                       FontWeight="Medium"
+                       FontFamily="Montserrat"
+                       HorizontalAlignment="Left"/>
+
+            <TextBlock Text="Vorname"
+                       Grid.Column="2"
+                       Foreground="White"
+                       FontSize="15"
+                       FontWeight="Light"
+                       FontFamily="Montserrat"
+                       HorizontalAlignment="Left"
+                       Margin="0,0,25,5"/>
+
+            <TextBlock Text="Nachname"
+                       Grid.Column="4"
+                       Foreground="White"
+                       FontSize="15"
+                       FontWeight="Light"
+                       FontFamily="Montserrat"
+                       HorizontalAlignment="Left"
+                       Margin="0,0,25,5"/>
+
+            <TextBlock Text="Straße"
+                       Grid.Column="6"
+                       Foreground="White"
+                       FontSize="15"
+                       FontWeight="Light"
+                       FontFamily="Montserrat"
+                       HorizontalAlignment="Left"
+                       Margin="0,0,25,5"/>
+
+            <TextBlock Text="Ort"
+                       Grid.Column="8"
+                       Foreground="White"
+                       FontSize="15"
+                       FontWeight="Light"
+                       FontFamily="Montserrat"
+                       HorizontalAlignment="Left"
+                       Margin="0,0,25,5"/>
+
+        </Grid>
+
+        <Grid Grid.Row="1">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="150"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="50"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0">
+
+                <TextBlock Text="Kassenwart:"
+                           Foreground="White"
+                           FontSize="15"
+                           FontWeight="Light"
+                           FontFamily="Montserrat"
+                           HorizontalAlignment="Left"
+                           Margin="0,0,0,5"/>
+
+                <TextBlock Text="Kassenprüfer I:"
+                           Foreground="White"
+                           FontSize="15"
+                           FontWeight="Light"
+                           FontFamily="Montserrat"
+                           HorizontalAlignment="Left"
+                           Margin="0,0,0,5"/>
+
+                <TextBlock Text="Kassenprüfer II:"
+                           Foreground="White"
+                           FontSize="15"
+                           FontWeight="Light"
+                           FontFamily="Montserrat"
+                           HorizontalAlignment="Left"
+                           Margin="0,0,0,5"/>
+
+            </StackPanel>
+
+            <StackPanel Grid.Column="2">
+
+                <TextBox Name="txtVornameKassenwart"
+                         Text="{Binding Einstellungen.AktuelleKassenpruefer[0].Vorname, UpdateSourceTrigger=PropertyChanged}"
+                         Foreground="White"
+                         VerticalContentAlignment="Bottom"
+                         FontSize="15"
+                         FontFamily="Montserrat"
+                         FontWeight="Light"
+                         Height="20"
+                         Background="Transparent"
+                         BorderBrush="#FFABADB3"
+                         BorderThickness="0,0,0,1"
+                         Margin="0,0,25,2" TabIndex="0">
+
+                    <TextBox.CaretBrush>
+                        <SolidColorBrush Color="#a099c3"/>
+                    </TextBox.CaretBrush>
+
+                </TextBox>
+
+                <TextBox Name="txtVornameKassenpruefer1"
+                         Text="{Binding Einstellungen.AktuelleKassenpruefer[1].Vorname, UpdateSourceTrigger=PropertyChanged}"
+                         Foreground="White"
+                         VerticalContentAlignment="Bottom"
+                         FontSize="15"
+                         FontFamily="Montserrat"
+                         FontWeight="Light"
+                         Height="20"
+                         Background="Transparent"
+                         BorderBrush="#FFABADB3"
+                         BorderThickness="0,0,0,1"
+                         Margin="0,0,25,2" TabIndex="4">
+
+                    <TextBox.CaretBrush>
+                        <SolidColorBrush Color="#a099c3"/>
+                    </TextBox.CaretBrush>
+
+                </TextBox>
+
+                <TextBox Name="txtVornameKassenpruefer2"
+                         Text="{Binding Einstellungen.AktuelleKassenpruefer[2].Vorname, UpdateSourceTrigger=PropertyChanged}"
+                         Foreground="White"
+                         VerticalContentAlignment="Bottom"
+                         FontSize="15"
+                         FontFamily="Montserrat"
+                         FontWeight="Light"
+                         Height="20"
+                         Background="Transparent"
+                         BorderBrush="#FFABADB3"
+                         BorderThickness="0,0,0,1"
+                         Margin="0,0,25,0" TabIndex="8">
+
+                    <TextBox.CaretBrush>
+                        <SolidColorBrush Color="#a099c3"/>
+                    </TextBox.CaretBrush>
+
+                </TextBox>
+
+            </StackPanel>
+
+            <StackPanel Grid.Column="4">
+
+                <TextBox Name="txtNachnameKassenwart"
+                         Text="{Binding Einstellungen.AktuelleKassenpruefer[0].Nachname, UpdateSourceTrigger=PropertyChanged}"
+                         Foreground="White"
+                         VerticalContentAlignment="Bottom"
+                         FontSize="15"
+                         FontFamily="Montserrat"
+                         FontWeight="Light"
+                         Height="20"
+                         Background="Transparent"
+                         BorderBrush="#FFABADB3"
+                         BorderThickness="0,0,0,1"
+                         Margin="0,0,25,2" TabIndex="1">
+
+                    <TextBox.CaretBrush>
+                        <SolidColorBrush Color="#a099c3"/>
+                    </TextBox.CaretBrush>
+
+                </TextBox>
+
+                <TextBox Name="txtNachnameKassenpruefer1"
+                         Text="{Binding Einstellungen.AktuelleKassenpruefer[1].Nachname, UpdateSourceTrigger=PropertyChanged}"
+                         Foreground="White"
+                         VerticalContentAlignment="Bottom"
+                         FontSize="15"
+                         FontFamily="Montserrat"
+                         FontWeight="Light"
+                         Height="20"
+                         Background="Transparent"
+                         BorderBrush="#FFABADB3"
+                         BorderThickness="0,0,0,1"
+                         Margin="0,0,25,2" TabIndex="5">
+
+                    <TextBox.CaretBrush>
+                        <SolidColorBrush Color="#a099c3"/>
+                    </TextBox.CaretBrush>
+
+                </TextBox>
+
+                <TextBox Name="txtNachnameKassenpruefer2"
+                         Text="{Binding Einstellungen.AktuelleKassenpruefer[2].Nachname, UpdateSourceTrigger=PropertyChanged}"
+                         Foreground="White"
+                         VerticalContentAlignment="Bottom"
+                         FontSize="15"
+                         FontFamily="Montserrat"
+                         FontWeight="Light"
+                         Height="20"
+                         Background="Transparent"
+                         BorderBrush="#FFABADB3"
+                         BorderThickness="0,0,0,1"
+                         Margin="0,0,25,0" TabIndex="9">
+
+                    <TextBox.CaretBrush>
+                        <SolidColorBrush Color="#a099c3"/>
+                    </TextBox.CaretBrush>
+
+                </TextBox>
+
+            </StackPanel>
+
+            <StackPanel Grid.Column="6">
+
+                <TextBox Name="txtStraßeKassenwart"
+                         Text="{Binding Einstellungen.AktuelleKassenpruefer[0].Strasse, UpdateSourceTrigger=PropertyChanged}"
+                         Foreground="White"
+                         VerticalContentAlignment="Bottom"
+                         FontSize="15"
+                         FontFamily="Montserrat"
+                         FontWeight="Light"
+                         Height="20"
+                         Background="Transparent"
+                         BorderBrush="#FFABADB3"
+                         BorderThickness="0,0,0,1"
+                         Margin="0,0,25,2" TabIndex="2">
+
+                    <TextBox.CaretBrush>
+                        <SolidColorBrush Color="#a099c3"/>
+                    </TextBox.CaretBrush>
+
+                </TextBox>
+
+                <TextBox Name="txtStraßeKassenppruefer1"
+                         Text="{Binding Einstellungen.AktuelleKassenpruefer[1].Strasse, UpdateSourceTrigger=PropertyChanged}"
+                         Foreground="White"
+                         VerticalContentAlignment="Bottom"
+                         FontSize="15"
+                         FontFamily="Montserrat"
+                         FontWeight="Light"
+                         Height="20"
+                         Background="Transparent"
+                         BorderBrush="#FFABADB3"
+                         BorderThickness="0,0,0,1"
+                         Margin="0,0,25,2" TabIndex="6">
+
+                    <TextBox.CaretBrush>
+                        <SolidColorBrush Color="#a099c3"/>
+                    </TextBox.CaretBrush>
+
+                </TextBox>
+
+                <TextBox Name="txtStraßeKassenppruefer2"
+                         Text="{Binding Einstellungen.AktuelleKassenpruefer[2].Strasse, UpdateSourceTrigger=PropertyChanged}"
+                         Foreground="White"
+                         VerticalContentAlignment="Bottom"
+                         FontSize="15"
+                         FontFamily="Montserrat"
+                         FontWeight="Light"
+                         Height="20"
+                         Background="Transparent"
+                         BorderBrush="#FFABADB3"
+                         BorderThickness="0,0,0,1"
+                         Margin="0,0,25,0" TabIndex="10">
+
+                    <TextBox.CaretBrush>
+                        <SolidColorBrush Color="#a099c3"/>
+                    </TextBox.CaretBrush>
+
+                </TextBox>
+
+            </StackPanel>
+
+            <StackPanel Grid.Column="8" Orientation="Vertical">
+
+                <TextBox Name="txtOrtKassenwart"
+                         Text="{Binding Einstellungen.AktuelleKassenpruefer[0].Ort, UpdateSourceTrigger=PropertyChanged}"
+                         Foreground="White"
+                         VerticalContentAlignment="Bottom"
+                         FontSize="15"
+                         FontFamily="Montserrat"
+                         FontWeight="Light"
+                         Height="20"
+                         Background="Transparent"
+                         BorderBrush="#FFABADB3"
+                         BorderThickness="0,0,0,1"
+                         Margin="0,0,25,2" TabIndex="3">
+
+                    <TextBox.CaretBrush>
+                        <SolidColorBrush Color="#a099c3"/>
+                    </TextBox.CaretBrush>
+
+                </TextBox>
+
+                <TextBox Name="txtOrtKassenpruefer1"
+                         Text="{Binding Einstellungen.AktuelleKassenpruefer[1].Ort, UpdateSourceTrigger=PropertyChanged}"
+                         Foreground="White"
+                         VerticalContentAlignment="Bottom"
+                         FontSize="15"
+                         FontFamily="Montserrat"
+                         FontWeight="Light"
+                         Height="20"
+                         Background="Transparent"
+                         BorderBrush="#FFABADB3"
+                         BorderThickness="0,0,0,1"
+                         Margin="0,0,25,2" TabIndex="7">
+
+                    <TextBox.CaretBrush>
+                        <SolidColorBrush Color="#a099c3"/>
+                    </TextBox.CaretBrush>
+
+                </TextBox>
+
+                <TextBox Name="txtOrtKassenpruefer2"
+                         Text="{Binding Einstellungen.AktuelleKassenpruefer[2].Ort, UpdateSourceTrigger=PropertyChanged}"
+                         Foreground="White"
+                         VerticalContentAlignment="Bottom"
+                         FontSize="15"
+                         FontFamily="Montserrat"
+                         FontWeight="Light"
+                         Height="20"
+                         Background="Transparent"
+                         BorderBrush="#FFABADB3"
+                         BorderThickness="0,0,0,1"
+                         Margin="0,0,25,0" TabIndex="11">
+
+                    <TextBox.CaretBrush>
+                        <SolidColorBrush Color="#a099c3"/>
+                    </TextBox.CaretBrush>
+
+                </TextBox>
+
+            </StackPanel>
+
+            <Button x:Name="btnUpdate"
+                    BorderThickness="0"
+                    Content="Speichern"
+                    HorizontalContentAlignment="Center"
+                    FontWeight="Medium"
+                    Foreground="White"
+                    FontSize="14"
+                    FontFamily="Montserrat"
+                    Cursor="Hand"
+                    Grid.Column="10"
+                    Margin="0,37,0,0"
+                    VerticalAlignment="Top"
+                    Command="{Binding Einstellungen.ChangeCommand}" TabIndex="12">
+
+                <Button.Style>
+                    <Style TargetType="Button">
+                        <Setter Property="Background" Value="#5e5299"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Background" Value="#a099c3"/>
+                            </Trigger>
+                        </Style.Triggers>
+
+                    </Style>
+                </Button.Style>
+
+                <Button.Template>
+                    <ControlTemplate TargetType="Button">
+                        <Border Width="100" Height="30"
+                                    CornerRadius="0"
+                                    Background="{TemplateBinding Background}">
+                            <ContentPresenter VerticalAlignment="Center"
+                                                  HorizontalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Button.Template>
+            </Button>
+
+        </Grid>
+
+        <Grid Grid.Row="5">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="50"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Positionen:"
+                       Grid.Column="0"
+                       Foreground="White"
+                       FontSize="15"
+                       FontWeight="Medium"
+                       FontFamily="Montserrat"
+                       HorizontalAlignment="Left"/>
+
+            <TextBlock Text="Auswahl"
+                       Grid.Column="2"
+                       Foreground="White"
+                       FontSize="15"
+                       FontWeight="Light"
+                       FontFamily="Montserrat"
+                       HorizontalAlignment="Left"
+                       Margin="0,0,25,5"/>
+
+            <TextBlock Text="Name"
+                       Grid.Column="4"
+                       Foreground="White"
+                       FontSize="15"
+                       FontWeight="Light"
+                       FontFamily="Montserrat"
+                       HorizontalAlignment="Left"
+                       Margin="0,0,25,5"/>
+
+            <TextBlock Text="Art"
+                       Grid.Column="6"
+                       Foreground="White"
+                       FontSize="15"
+                       FontWeight="Light"
+                       FontFamily="Montserrat"
+                       HorizontalAlignment="Left"
+                       Margin="0,0,25,5"/>
+
+            <TextBlock Text="St."
+                       Grid.Column="8"
+                       Foreground="White"
+                       FontSize="15"
+                       FontWeight="Light"
+                       FontFamily="Montserrat"
+                       HorizontalAlignment="Left"
+                       Margin="0,0,25,5"/>
+
+            <TextBlock Text="Gruppe"
+                       Grid.Column="10"
+                       Foreground="White"
+                       FontSize="15"
+                       FontWeight="Light"
+                       FontFamily="Montserrat"
+                       HorizontalAlignment="Left"
+                       Margin="0,0,25,5"/>
+
+        </Grid>
+
+        <Grid Grid.Row="6">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="50"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+
+                <TextBlock Text="Position:"
+                       Foreground="White"
+                           FontSize="15"
+                           FontWeight="Light"
+                           FontFamily="Montserrat"
+                           HorizontalAlignment="Left"
+                           Margin="0,7,0,5"/>
+
+            </Grid>
+
+            <Grid Grid.Column="2">
+
+                <ComboBox Name="cBoxPosition"
+                          VerticalAlignment="Top"
+                          HorizontalAlignment="Left"
+                         BorderThickness="0.5"
+                         FontSize="14"
+                         FontWeight="Light"
+                         Height="26"
+                         Margin="0,3,0,0"
+                         Width="175"
+                         DisplayMemberPath="Name"
+                         ItemsSource="{Binding Einstellungen.PositionenListe, UpdateSourceTrigger=PropertyChanged}"
+                         SelectedItem="{Binding Einstellungen.AktuellePosition, UpdateSourceTrigger=PropertyChanged}" TabIndex="13">
+
+                    <ComboBox.ItemContainerStyle>
+                        <Style TargetType="ComboBoxItem">
+                            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+                            <Setter Property="VerticalContentAlignment" Value="Center"/>
+                        </Style>
+                    </ComboBox.ItemContainerStyle>
+
+                    <ComboBox.BorderBrush>
+                        <SolidColorBrush Color="#FFABADB3" Opacity="0"/>
+                    </ComboBox.BorderBrush>
+                </ComboBox>
+
+            </Grid>
+
+            <Grid Grid.Column="4">
+
+                <TextBox Name="txtNamePosition"
+                         VerticalAlignment="Top"
+                         Text="{Binding Einstellungen.AktuellePosition.Name, UpdateSourceTrigger=PropertyChanged}"
+                         Foreground="White"
+                         VerticalContentAlignment="Bottom"
+                         FontSize="15"
+                         FontFamily="Montserrat"
+                         FontWeight="Light"
+                         Height="20"
+                         Background="Transparent"
+                         BorderBrush="#FFABADB3"
+                         BorderThickness="0,0,0,1"
+                         Margin="0,7,25,2" TabIndex="14">
+
+                    <TextBox.CaretBrush>
+                        <SolidColorBrush Color="#a099c3"/>
+                    </TextBox.CaretBrush>
+
+                </TextBox>
+
+            </Grid>
+
+            <Grid Grid.Column="6">
+
+                <TextBox Name="txtArtPosition"
+                         VerticalAlignment="Top"
+                         Text="{Binding Einstellungen.AktuellePosition.EinnahmeAusgabe, UpdateSourceTrigger=PropertyChanged}"
+                         Foreground="White"
+                         VerticalContentAlignment="Bottom"
+                         FontSize="15"
+                         FontFamily="Montserrat"
+                         FontWeight="Light"
+                         Height="20"
+                         Background="Transparent"
+                         BorderBrush="#FFABADB3"
+                         BorderThickness="0,0,0,1"
+                         Margin="0,7,25,2" TabIndex="15">
+
+                    <TextBox.CaretBrush>
+                        <SolidColorBrush Color="#a099c3"/>
+                    </TextBox.CaretBrush>
+
+                </TextBox>
+
+            </Grid>
+
+            <Grid Grid.Column="8">
+
+                <TextBox Name="txtSteuerklassePosition"
+                         VerticalAlignment="Top"
+                         Text="{Binding Einstellungen.AktuellePosition.Steuerklasse, UpdateSourceTrigger=PropertyChanged}"
+                         Foreground="White"
+                         VerticalContentAlignment="Bottom"
+                         FontSize="15"
+                         FontFamily="Montserrat"
+                         FontWeight="Light"
+                         Height="20"
+                         Background="Transparent"
+                         BorderBrush="#FFABADB3"
+                         BorderThickness="0,0,0,1"
+                         Margin="0,7,25,2" TabIndex="16">
+
+                    <TextBox.CaretBrush>
+                        <SolidColorBrush Color="#a099c3"/>
+                    </TextBox.CaretBrush>
+
+                </TextBox>
+
+            </Grid>
+
+            <Grid Grid.Column="10">
+
+                <TextBox Name="txtGruppePosition"
+                         VerticalAlignment="Top"
+                         Text="{Binding Einstellungen.AktuellePosition.KassenberichtGruppe, UpdateSourceTrigger=PropertyChanged}"
+                         Foreground="White"
+                         VerticalContentAlignment="Bottom"
+                         FontSize="15"
+                         FontFamily="Montserrat"
+                         FontWeight="Light"
+                         Height="20"
+                         Background="Transparent"
+                         BorderBrush="#FFABADB3"
+                         BorderThickness="0,0,0,1"
+                         Margin="0,7,25,2" TabIndex="17">
+
+                    <TextBox.CaretBrush>
+                        <SolidColorBrush Color="#a099c3"/>
+                    </TextBox.CaretBrush>
+
+                </TextBox>
+
+            </Grid>
+
+            <Grid Grid.Column="12">
+
+                <StackPanel Orientation="Vertical"
+                            VerticalAlignment="Top">
+
+                    <Button x:Name="btnUpdate2"
+                    BorderThickness="0"
+                    Content="Speichern"
+                    HorizontalContentAlignment="Center"
+                    FontWeight="Medium"
+                    Foreground="White"
+                    FontSize="14"
+                    FontFamily="Montserrat"
+                    Cursor="Hand"
+                    Margin="0,-50,0,0"
+                    Command="{Binding Einstellungen.ChangeCommand2}" TabIndex="18">
+
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#5e5299"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#a099c3"/>
+                                    </Trigger>
+                                </Style.Triggers>
+
+                            </Style>
+                        </Button.Style>
+
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Width="100" Height="30"
+                                    CornerRadius="0"
+                                    Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center"
+                                                  HorizontalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
+                    <Button x:Name="btnDelete"
+                            BorderThickness="0"
+                            Content="Entfernen"
+                            HorizontalContentAlignment="Center"
+                            FontWeight="Medium"
+                            Foreground="White"
+                            FontSize="14"
+                            FontFamily="Montserrat"
+                            Cursor="Hand"
+                            Margin="0,0,0,0"
+                            Command="{Binding Einstellungen.DeleteCommand}" TabIndex="19">
+
+                        <Button.Style>
+                            <Style TargetType="Button">
+                                <Setter Property="Background" Value="#b75372"/>
+                                <Style.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Background" Value="#d796b5"/>
+                                    </Trigger>
+                                </Style.Triggers>
+
+                            </Style>
+                        </Button.Style>
+
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Width="100" Height="30"
+                                    CornerRadius="0"
+                                    Background="{TemplateBinding Background}">
+                                    <ContentPresenter VerticalAlignment="Center"
+                                                  HorizontalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
+
+                </StackPanel>
+
+            </Grid>
+
+        </Grid>
+
+        <Grid Grid.Row="10">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="50"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="Projekte:"
+                       Foreground="White"
+                       FontSize="15"
+                       FontWeight="Medium"
+                       FontFamily="Montserrat"
+                       HorizontalAlignment="Left"/>
+
+            <TextBlock Text="Auswahl"
+                       Grid.Column="2"
+                       Foreground="White"
+                       FontSize="15"
+                       FontWeight="Light"
+                       FontFamily="Montserrat"
+                       HorizontalAlignment="Left"
+                       Margin="0,0,25,5"/>
+
+        </Grid>
+
+        <Grid Grid.Row="11">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="50"/>
+            </Grid.ColumnDefinitions>
+
+            <Grid Grid.Column="0">
+
+                <TextBlock Text="Projekt:"
+                       Foreground="White"
+                           FontSize="15"
+                           FontWeight="Light"
+                           FontFamily="Montserrat"
+                           HorizontalAlignment="Left"
+                           Margin="0,7,0,5"/>
+
+            </Grid>
+
+            <Grid Grid.Column="2">
+
+                <ComboBox Name="cBoxProjekt"
+                          VerticalAlignment="Top"
+                          HorizontalAlignment="Left"
+                          BorderThickness="0.5"
+                          FontSize="14"
+                          FontWeight="Light"
+                          Height="26"
+                          Margin="0,3,0,0"
+                          Width="175"
+                          MinWidth="175"
+                          DisplayMemberPath="Name"
+                          ItemsSource="{Binding Einstellungen.ProjektListe, UpdateSourceTrigger=PropertyChanged}"
+                          SelectedItem="{Binding Einstellungen.AktuellesProjekt, UpdateSourceTrigger=PropertyChanged}"
+                          HorizontalContentAlignment="Left"
+                          VerticalContentAlignment="Center" TabIndex="20">
+                    
+                    <ComboBox.BorderBrush>
+                        <SolidColorBrush Color="#FFABADB3" Opacity="0"/>
+                    </ComboBox.BorderBrush>
+                    
+                </ComboBox>
+
+            </Grid>
+
+            <Grid Grid.Column="4">
+
+                <Button x:Name="btnDelete2"
+                            BorderThickness="0"
+                            Content="Entfernen"
+                            HorizontalContentAlignment="Center"
+                            FontWeight="Medium"
+                            Foreground="White"
+                            FontSize="14"
+                            FontFamily="Montserrat"
+                            Cursor="Hand"
+                            Margin="0,0,0,0"
+                            Command="{Binding Einstellungen.DeleteCommand2}" TabIndex="21">
+
+                    <Button.Style>
+                        <Style TargetType="Button">
+                            <Setter Property="Background" Value="#b75372"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#d796b5"/>
+                                </Trigger>
+                            </Style.Triggers>
+
+                        </Style>
+                    </Button.Style>
+
+                    <Button.Template>
+                        <ControlTemplate TargetType="Button">
+                            <Border Width="100" Height="30"
+                                    CornerRadius="0"
+                                    Background="{TemplateBinding Background}">
+                                <ContentPresenter VerticalAlignment="Center"
+                                                  HorizontalAlignment="Center"/>
+                            </Border>
+                        </ControlTemplate>
+                    </Button.Template>
+                </Button>
+
+            </Grid>
+
+        </Grid>
+
     </Grid>
+
 </UserControl>

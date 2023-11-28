@@ -10,7 +10,7 @@
         xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp" 
         d:DataContext="{d:SampleData}"
         mc:Ignorable="d"
-        Title="MainView" Height="700" Width="1300"
+        Title="MainView" Height="700" Width="1450"
         WindowStartupLocation="CenterScreen"
         WindowStyle="None"
         Background="Transparent"

@@ -10,10 +10,5 @@ namespace WPF_LoginForm.Model
     {
         public int ID { get; set; }
         public int Name { get; set; }
-
-        public int PreviousProject()
-        {
-            return this.Name - 1;
-        }
     }
 }

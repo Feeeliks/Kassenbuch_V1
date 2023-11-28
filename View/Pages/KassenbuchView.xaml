@@ -6,6 +6,8 @@
              xmlns:local="clr-namespace:WPF_LoginForm.View.Pages"
              xmlns:viewModelPage="clr-namespace:WPF_LoginForm.ViewModels.Pages"
              xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp"
+             xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+             d:DataContext="{d:DesignInstance Type=viewModelPage:CombinedViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="1200">
 
@@ -21,7 +23,7 @@
                   Grid.ColumnSpan="2"
                   CornerRadius="0"
                   Background="Transparent"
-                  BorderBrush="White"
+                  BorderBrush="#FFABADB3"
                   BorderThickness="1" />
                 <Border 
                   Grid.Column="0"
@@ -33,7 +35,7 @@
                 <Path 
                   x:Name="Arrow"
                   Grid.Column="1"     
-                  Fill="White"
+                  Fill="#FFABADB3"
                   HorizontalAlignment="Center"
                   VerticalAlignment="Center"
                   Data="M0,0 L0,2 L4,6 L8,2 L8,0 L4,4 z"
@@ -178,21 +180,46 @@
     <Grid>
 
         <Grid.RowDefinitions>
-            <RowDefinition Height="15"/>
+            <RowDefinition Height="20"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="15"/>
+            <RowDefinition Height="20"/>
             <RowDefinition Height="30"/>
-            <RowDefinition Height="Auto"/>
+            <RowDefinition Height="55"/>
+
+            <RowDefinition>
+                <RowDefinition.Style>
+                    <Style TargetType="RowDefinition">
+                        <Setter Property="Height" Value="0" />
+                        <Style.Triggers>
+                            <DataTrigger Binding="{Binding Kassenbuch.IsErrorMessageVisible}" Value="True">
+                                <Setter Property="Height" Value="Auto" />
+                            </DataTrigger>
+                        </Style.Triggers>
+                    </Style>
+                </RowDefinition.Style>
+            </RowDefinition>
+
+
+            <RowDefinition Height="50"
+                           x:Name="Infozeile"/>
         </Grid.RowDefinitions>
+
+        <TextBlock Grid.Row="5" 
+                   Text="{Binding Kassenbuch.ErrorMessage}"
+                   Foreground="#D7596D"
+                   FontSize="12"
+                   FontFamily="Montserrat"
+                   Margin="0,10,0,0"
+                   TextWrapping="Wrap"/>
 
         <!-- HEADER UP -->
         <Grid Grid.Row="0">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="300"/>
                 <ColumnDefinition Width="250"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="250"/>
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
@@ -200,9 +227,9 @@
             <StackPanel Orientation="Horizontal"
                         Grid.Column="0">
 
-                <TextBlock Text="{Binding Home.PreviousProjectName, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, StringFormat=' {0}:'}"
+                <TextBlock Text="{Binding Home.VorherigesProjekt, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, StringFormat=' {0}:'}"
                            Foreground="White"
-                           FontSize="12"
+                           FontSize="15"
                            FontWeight="Medium"
                            FontFamily="Montserrat"
                            HorizontalAlignment="Left"
@@ -215,26 +242,19 @@
 
                 <TextBlock Text="Vereinsbestand:"
                            Foreground="White"
-                           FontSize="12"
+                           FontSize="15"
                            FontWeight="Medium"
                            FontFamily="Montserrat"
                            HorizontalAlignment="Left"/>
 
-                <TextBlock Text="14.659,87"
+                <TextBlock Text="{Binding Kassenbuch.Kassenstand[4], StringFormat={}{0:C2}, UpdateSourceTrigger=PropertyChanged}"
                            Foreground="White"
-                           FontSize="12"
+                           FontSize="15"
                            FontWeight="Medium"
                            FontFamily="Montserrat"
                            HorizontalAlignment="Left"
-                           Margin="10,0,0,0"/>
-
-                <TextBlock Text="EUR"
-                           Foreground="White"
-                           FontSize="12"
-                           FontWeight="Medium"
-                           FontFamily="Montserrat"
-                           HorizontalAlignment="Left"
-                           Margin="3,0,0,0"/>
+                           Margin="10,0,0,0"
+                           Language="de-DE"/>
 
             </StackPanel>
 
@@ -243,26 +263,19 @@
 
                 <TextBlock Text="Kontostand:"
                            Foreground="White"
-                           FontSize="12"
+                           FontSize="15"
                            FontWeight="Light"
                            FontFamily="Montserrat"
                            HorizontalAlignment="Left"/>
 
-                <TextBlock Text="14.659,87"
+                <TextBlock Text="{Binding Kassenbuch.Kassenstand[5], StringFormat={}{0:C2}, UpdateSourceTrigger=PropertyChanged}"
                            Foreground="White"
-                           FontSize="12"
+                           FontSize="15"
                            FontWeight="Light"
                            FontFamily="Montserrat"
                            HorizontalAlignment="Left"
-                           Margin="10,0,0,0"/>
-
-                <TextBlock Text="EUR"
-                           Foreground="White"
-                           FontSize="12"
-                           FontWeight="Light"
-                           FontFamily="Montserrat"
-                           HorizontalAlignment="Left"
-                           Margin="3,0,0,0"/>
+                           Margin="10,0,0,0"
+                           Language="de-DE"/>
 
             </StackPanel>
 
@@ -271,26 +284,19 @@
 
                 <TextBlock Text="Handkasse:"
                            Foreground="White"
-                           FontSize="12"
+                           FontSize="15"
                            FontWeight="Light"
                            FontFamily="Montserrat"
                            HorizontalAlignment="Left"/>
 
-                <TextBlock Text="14.309,87"
+                <TextBlock Text="{Binding Kassenbuch.Kassenstand[6], StringFormat={}{0:C2}, UpdateSourceTrigger=PropertyChanged}"
                            Foreground="White"
-                           FontSize="12"
+                           FontSize="15"
                            FontWeight="Light"
                            FontFamily="Montserrat"
                            HorizontalAlignment="Left"
-                           Margin="10,0,0,0"/>
-
-                <TextBlock Text="EUR"
-                           Foreground="White"
-                           FontSize="12"
-                           FontWeight="Light"
-                           FontFamily="Montserrat"
-                           HorizontalAlignment="Left"
-                           Margin="3,0,0,0"/>
+                           Margin="10,0,0,0"
+                           Language="de-DE"/>
 
             </StackPanel>
 
@@ -299,26 +305,19 @@
 
                 <TextBlock Text="Ausschankkasse:"
                            Foreground="White"
-                           FontSize="12"
+                           FontSize="15"
                            FontWeight="Light"
                            FontFamily="Montserrat"
                            HorizontalAlignment="Left"/>
 
-                <TextBlock Text="350,00"
+                <TextBlock Text="{Binding Kassenbuch.Kassenstand[7], StringFormat={}{0:C2}, UpdateSourceTrigger=PropertyChanged}"
                            Foreground="White"
-                           FontSize="12"
+                           FontSize="15"
                            FontWeight="Light"
                            FontFamily="Montserrat"
                            HorizontalAlignment="Left"
-                           Margin="10,0,0,0"/>
-
-                <TextBlock Text="EUR"
-                           Foreground="White"
-                           FontSize="12"
-                           FontWeight="Light"
-                           FontFamily="Montserrat"
-                           HorizontalAlignment="Left"
-                           Margin="3,0,0,0"/>
+                           Margin="10,0,0,0"
+                           Language="de-DE"/>
 
             </StackPanel>
 
@@ -330,118 +329,362 @@
             <Border Background="Transparent"
                     Padding="0,10,0,10">
 
-                <DataGrid Name="dgKassenbuch" 
+                <DataGrid Name="dgKassenbuch"
+                          HeadersVisibility="Column"
                           ColumnWidth="*"
                           Background="#26ffffff"
                           BorderThickness="0" 
-                          HorizontalGridLinesBrush="White">
+                          HorizontalGridLinesBrush="#26ffffff"
+                          VerticalGridLinesBrush="#26ffffff"
+                          DataContext="{Binding Kassenbuch}"
+                          ItemsSource="{Binding AktuellesKassenbuchView,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                          SelectedItem="{Binding SelectedItem}"
+                          AutoGenerateColumns="False" 
+                          FontSize="14"
+                          Language="de-DE"
+                          IsReadOnly="True"
+                          HorizontalScrollBarVisibility="Disabled"
+                          VerticalScrollBarVisibility="Hidden"
+                          SelectionMode="Single">
+
+                    <DataGrid.GroupStyle>
+                        <!-- Gruppierungs-Stil für die Monats-Gruppe -->
+                        <GroupStyle>
+                            <GroupStyle.ContainerStyle>
+                                <Style TargetType="{x:Type GroupItem}">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="{x:Type GroupItem}">
+                                                <Expander IsExpanded="True"
+                                                          Padding="5"
+                                                          Foreground="#FFEEEEEE" 
+                                                          BorderThickness="1,1,1,5"
+                                                          BorderBrush="Transparent">
+                                                    <Expander.Header>
+                                                        <StackPanel Orientation="Horizontal">
+                                                            <TextBlock Text="{Binding Path=Name}" 
+                                                                       FontWeight="Medium"
+                                                                       Foreground="#BCBEE0"
+                                                                       FontSize="14"
+                                                                       VerticalAlignment="Center"/>
+                                                        </StackPanel>
+                                                    </Expander.Header>
+                                                    <ItemsPresenter />
+                                                </Expander>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </GroupStyle.ContainerStyle>
+                        </GroupStyle>
+
+                        <!-- Gruppierungs-Stil für die B-Gruppe -->
+                        <GroupStyle>
+                            <GroupStyle.HeaderTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal">
+                                        <TextBlock Text="{Binding Path=Name}" 
+                                                   Foreground="#BCBEE0"
+                                                   FontSize="13"
+                                                   VerticalAlignment="Center"
+                                                   FontWeight="Medium"
+                                                   Padding="5"
+                                                   Margin="25,0,0,0"/>
+                                    </StackPanel>
+                                </DataTemplate>
+                            </GroupStyle.HeaderTemplate>
+                        </GroupStyle>
+                    </DataGrid.GroupStyle>
+
+                    <DataGrid.Resources>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightBrushKey}" 
+                                         Color="#a0aaff"/>
+                        <SolidColorBrush x:Key="{x:Static SystemColors.HighlightTextBrushKey}" 
+                                         Color="Black"/>
+                    </DataGrid.Resources>
+
+                    <DataGrid.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="BorderThickness" Value="0" />
+                        </Style>
+                    </DataGrid.CellStyle>
+
+                    <DataGrid.RowStyle>
+                        <Style TargetType="DataGridRow">
+                            <Setter Property="Background" Value="#26ffffff"/>
+                            <Setter Property="Foreground" Value="#BCBEE0"/>
+                            <Style.Triggers>
+                                <Trigger Property="IsMouseOver" Value="True">
+                                    <Setter Property="Background" Value="#36ffffff"/>
+                                    <Setter Property="Foreground" Value="White"/>
+                                    <Setter Property="BorderThickness" Value="0"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.RowStyle>
 
                     <DataGrid.ColumnHeaderStyle>
                         <Style TargetType="DataGridColumnHeader">
                             <Setter Property="Background" Value="Transparent"/>
                             <Setter Property="Foreground" Value="#BCBEE0"/>
-                            <Setter Property="Padding" Value="10"/>
+                            <Setter Property="Padding" Value="5"/>
                             <Setter Property="FontFamily" Value="Montserrat"/>
-                            <Setter Property="FontSize" Value="12"/>
+                            <Setter Property="FontSize" Value="14"/>
+                            <Setter Property="FontWeight" Value="Medium"/>
+                            <Setter Property="BorderThickness" Value="0"/>
+                            <Setter Property="HorizontalContentAlignment" Value="Center"/>
                         </Style>
                     </DataGrid.ColumnHeaderStyle>
 
                     <DataGrid.Columns>
-                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Datum" Width="*"/>
-                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Position" Width="Auto"/>
-                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="B" Width="Auto"/>
-                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Beleg" Width="*"/>
-                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Header="Betrag" Width="*"/>
-                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Width="*">
+                        <DataGridTextColumn Binding="{Binding Datum, StringFormat={}{0:dd.MM.yyyy}}" Header="Datum" Width="Auto">
+
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextAlignment" Value="Center" />
+                                    <Setter Property="Margin" Value="10,0,10,0"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding Position}" Header="Position" Width="Auto">
+
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextAlignment" Value="Center"/>
+                                    <Setter Property="Margin" Value="10,0,10,0"/>
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding Kontobeleg}" Header="B" Width="Auto">
+
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding Belegnummer}" Header="Nr." Width="Auto">
+
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding Betrag, StringFormat={}{0:C2}}" Header="Betrag" Width="*">
+
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextAlignment" Value="Center" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+
+                            <DataGridTextColumn.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                                    <Setter Property="BorderBrush" Value="#8bc6c6c6"/>
+                                </Style>
+                            </DataGridTextColumn.CellStyle>
+
+                        </DataGridTextColumn>
+                        <DataGridTextColumn Binding="{Binding KontoEinnahme, StringFormat={}{0:C2}}" Width="*">
+
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextAlignment" Value="Center" />
+                                    <Setter Property="FontWeight" Value="Light" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+
                             <DataGridTextColumn.HeaderTemplate>
-                            <DataTemplate>
-                                <TextBlock Text="Konto +" Foreground="Lightgreen" />
-                            </DataTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="Konto +" Foreground="Lightgreen" />
+                                </DataTemplate>
                             </DataGridTextColumn.HeaderTemplate>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Width="*">
+                        <DataGridTextColumn Binding="{Binding KontoAusgabe, StringFormat={}{0:C2}}" Width="*">
+
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextAlignment" Value="Center" />
+                                    <Setter Property="FontWeight" Value="Light" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+
                             <DataGridTextColumn.HeaderTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="Konto -" Foreground="IndianRed" />
                                 </DataTemplate>
                             </DataGridTextColumn.HeaderTemplate>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Width="*">
+                        <DataGridTextColumn Binding="{Binding KasseEinnahme, StringFormat={}{0:C2}}" Width="*">
+
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextAlignment" Value="Center" />
+                                    <Setter Property="FontWeight" Value="Light" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+
                             <DataGridTextColumn.HeaderTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="Kasse +" Foreground="Lightgreen" />
                                 </DataTemplate>
                             </DataGridTextColumn.HeaderTemplate>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Width="*">
+                        <DataGridTextColumn Binding="{Binding KasseAusgabe, StringFormat={}{0:C2}}" Width="*">
+
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextAlignment" Value="Center" />
+                                    <Setter Property="FontWeight" Value="Light" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+
+                            <DataGridTextColumn.CellStyle>
+                                <Style TargetType="DataGridCell">
+                                    <Setter Property="BorderThickness" Value="0,0,1,0"/>
+                                    <Setter Property="BorderBrush" Value="#8bc6c6c6"/>
+                                </Style>
+                            </DataGridTextColumn.CellStyle>
+
                             <DataGridTextColumn.HeaderTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="Kasse -" Foreground="IndianRed" />
                                 </DataTemplate>
                             </DataGridTextColumn.HeaderTemplate>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Width="*">
+                        <DataGridTextColumn Binding="{Binding Steuer1Einnahme, StringFormat={}{0:C2}}" Width="*">
+
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextAlignment" Value="Center" />
+                                    <Setter Property="FontWeight" Value="Light" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+
                             <DataGridTextColumn.HeaderTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="I +" Foreground="Lightgreen" />
+                                    <TextBlock Text="St. I +" Foreground="Lightgreen" />
                                 </DataTemplate>
                             </DataGridTextColumn.HeaderTemplate>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Width="*">
+                        <DataGridTextColumn Binding="{Binding Steuer1Ausgabe, StringFormat={}{0:C2}}" Width="*">
+
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextAlignment" Value="Center" />
+                                    <Setter Property="FontWeight" Value="Light" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+
                             <DataGridTextColumn.HeaderTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="I -" Foreground="IndianRed" />
+                                    <TextBlock Text="St. I -" Foreground="IndianRed" />
                                 </DataTemplate>
                             </DataGridTextColumn.HeaderTemplate>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Width="*">
+                        <DataGridTextColumn Binding="{Binding Steuer2Einnahme, StringFormat={}{0:C2}}" Width="*">
+
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextAlignment" Value="Center" />
+                                    <Setter Property="FontWeight" Value="Light" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+
                             <DataGridTextColumn.HeaderTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="II +" Foreground="Lightgreen" />
+                                    <TextBlock Text="St. II +" Foreground="Lightgreen" />
+
                                 </DataTemplate>
                             </DataGridTextColumn.HeaderTemplate>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Width="*">
+                        <DataGridTextColumn Binding="{Binding Steuer2Ausgabe, StringFormat={}{0:C2}}" Width="*">
+
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextAlignment" Value="Center" />
+                                    <Setter Property="FontWeight" Value="Light" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+
                             <DataGridTextColumn.HeaderTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="II -" Foreground="IndianRed" />
+                                    <TextBlock Text="St. II -" Foreground="IndianRed" />
                                 </DataTemplate>
                             </DataGridTextColumn.HeaderTemplate>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Width="*">
+                        <DataGridTextColumn Binding="{Binding Steuer3Einnahme, StringFormat={}{0:C2}}" Width="*">
+
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextAlignment" Value="Center" />
+                                    <Setter Property="FontWeight" Value="Light" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+
                             <DataGridTextColumn.HeaderTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="III +" Foreground="Lightgreen" />
+                                    <TextBlock Text="St. III +" Foreground="Lightgreen" />
                                 </DataTemplate>
                             </DataGridTextColumn.HeaderTemplate>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Width="*">
+                        <DataGridTextColumn Binding="{Binding Steuer3Ausgabe, StringFormat={}{0:C2}}" Width="*">
+
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextAlignment" Value="Center" />
+                                    <Setter Property="FontWeight" Value="Light" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+
                             <DataGridTextColumn.HeaderTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="III -" Foreground="IndianRed" />
+                                    <TextBlock Text="St. III -" Foreground="IndianRed" />
                                 </DataTemplate>
                             </DataGridTextColumn.HeaderTemplate>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Width="*">
+                        <DataGridTextColumn Binding="{Binding Steuer4Einnahme, StringFormat={}{0:C2}}" Width="*">
+
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextAlignment" Value="Center" />
+                                    <Setter Property="FontWeight" Value="Light" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+
                             <DataGridTextColumn.HeaderTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="IV +" Foreground="Lightgreen" />
+                                    <TextBlock Text="St. IV +" Foreground="Lightgreen" />
                                 </DataTemplate>
                             </DataGridTextColumn.HeaderTemplate>
                         </DataGridTextColumn>
-                        <DataGridTextColumn Binding="{x:Null}" ClipboardContentBinding="{x:Null}" Width="*">
+                        <DataGridTextColumn Binding="{Binding Steuer4Ausgabe, StringFormat={}{0:C2}}" Width="*">
+
+                            <DataGridTextColumn.ElementStyle>
+                                <Style TargetType="TextBlock">
+                                    <Setter Property="TextAlignment" Value="Center" />
+                                    <Setter Property="FontWeight" Value="Light" />
+                                </Style>
+                            </DataGridTextColumn.ElementStyle>
+
                             <DataGridTextColumn.HeaderTemplate>
                                 <DataTemplate>
-                                    <TextBlock Text="IV -" Foreground="IndianRed" />
+                                    <TextBlock Text="St. IV -" Foreground="IndianRed" />
                                 </DataTemplate>
                             </DataGridTextColumn.HeaderTemplate>
                         </DataGridTextColumn>
                     </DataGrid.Columns>
 
                 </DataGrid>
-                
+
             </Border>
-            
+
         </Grid>
 
         <!-- HEADER DOWN -->
@@ -449,9 +692,9 @@
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="300"/>
                 <ColumnDefinition Width="250"/>
-                <ColumnDefinition Width="200"/>
-                <ColumnDefinition Width="200"/>
+                <ColumnDefinition Width="250"/>
                 <ColumnDefinition Width="200"/>
                 <ColumnDefinition/>
             </Grid.ColumnDefinitions>
@@ -459,9 +702,9 @@
             <StackPanel Orientation="Horizontal"
                         Grid.Column="0">
 
-                <TextBlock Text="{Binding Home.AktuellesProjekt.Name, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, StringFormat=' {0}:'}"
+                <TextBlock Text="{Binding Home.AktuellesProjekt, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, StringFormat=' {0}:'}"
                            Foreground="White"
-                           FontSize="12"
+                           FontSize="15"
                            FontWeight="Medium"
                            FontFamily="Montserrat"
                            HorizontalAlignment="Left"
@@ -474,26 +717,19 @@
 
                 <TextBlock Text="Vereinsbestand:"
                            Foreground="White"
-                           FontSize="12"
+                           FontSize="15"
                            FontWeight="Medium"
                            FontFamily="Montserrat"
                            HorizontalAlignment="Left"/>
 
-                <TextBlock Text="14.659,87"
+                <TextBlock Text="{Binding Kassenbuch.Kassenstand[0], StringFormat={}{0:C2}, UpdateSourceTrigger=PropertyChanged}"
                            Foreground="White"
-                           FontSize="12"
+                           FontSize="15"
                            FontWeight="Medium"
                            FontFamily="Montserrat"
                            HorizontalAlignment="Left"
-                           Margin="10,0,0,0"/>
-
-                <TextBlock Text="EUR"
-                           Foreground="White"
-                           FontSize="12"
-                           FontWeight="Medium"
-                           FontFamily="Montserrat"
-                           HorizontalAlignment="Left"
-                           Margin="3,0,0,0"/>
+                           Margin="10,0,0,0"
+                           Language="de-DE"/>
 
             </StackPanel>
 
@@ -502,26 +738,19 @@
 
                 <TextBlock Text="Kontostand:"
                            Foreground="White"
-                           FontSize="12"
+                           FontSize="15"
                            FontWeight="Light"
                            FontFamily="Montserrat"
                            HorizontalAlignment="Left"/>
 
-                <TextBlock Text="14.659,87"
+                <TextBlock Text="{Binding Kassenbuch.Kassenstand[1], StringFormat={}{0:C2}, UpdateSourceTrigger=PropertyChanged}"
                            Foreground="White"
-                           FontSize="12"
+                           FontSize="15"
                            FontWeight="Light"
                            FontFamily="Montserrat"
                            HorizontalAlignment="Left"
-                           Margin="10,0,0,0"/>
-
-                <TextBlock Text="EUR"
-                           Foreground="White"
-                           FontSize="12"
-                           FontWeight="Light"
-                           FontFamily="Montserrat"
-                           HorizontalAlignment="Left"
-                           Margin="3,0,0,0"/>
+                           Margin="10,0,0,0"
+                           Language="de-DE"/>
 
             </StackPanel>
 
@@ -530,26 +759,19 @@
 
                 <TextBlock Text="Handkasse:"
                            Foreground="White"
-                           FontSize="12"
+                           FontSize="15"
                            FontWeight="Light"
                            FontFamily="Montserrat"
                            HorizontalAlignment="Left"/>
 
-                <TextBlock Text="14.309,87"
+                <TextBlock Text="{Binding Kassenbuch.Kassenstand[2], StringFormat={}{0:C2}, UpdateSourceTrigger=PropertyChanged}"
                            Foreground="White"
-                           FontSize="12"
+                           FontSize="15"
                            FontWeight="Light"
                            FontFamily="Montserrat"
                            HorizontalAlignment="Left"
-                           Margin="10,0,0,0"/>
-
-                <TextBlock Text="EUR"
-                           Foreground="White"
-                           FontSize="12"
-                           FontWeight="Light"
-                           FontFamily="Montserrat"
-                           HorizontalAlignment="Left"
-                           Margin="3,0,0,0"/>
+                           Margin="10,0,0,0"
+                           Language="de-DE"/>
 
             </StackPanel>
 
@@ -558,26 +780,19 @@
 
                 <TextBlock Text="Ausschankkasse:"
                            Foreground="White"
-                           FontSize="12"
+                           FontSize="15"
                            FontWeight="Light"
                            FontFamily="Montserrat"
                            HorizontalAlignment="Left"/>
 
-                <TextBlock Text="350,00"
+                <TextBlock Text="{Binding Kassenbuch.Kassenstand[3], StringFormat={}{0:C2}, UpdateSourceTrigger=PropertyChanged}"
                            Foreground="White"
-                           FontSize="12"
+                           FontSize="15"
                            FontWeight="Light"
                            FontFamily="Montserrat"
                            HorizontalAlignment="Left"
-                           Margin="10,0,0,0"/>
-
-                <TextBlock Text="EUR"
-                           Foreground="White"
-                           FontSize="12"
-                           FontWeight="Light"
-                           FontFamily="Montserrat"
-                           HorizontalAlignment="Left"
-                           Margin="3,0,0,0"/>
+                           Margin="10,0,0,0"
+                           Language="de-DE"/>
 
             </StackPanel>
 
@@ -587,21 +802,18 @@
         <Grid Grid.Row="4">
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="100"/>
-                <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="100"/>
-                <ColumnDefinition Width="25"/>
                 <ColumnDefinition Width="125"/>
-                <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="75"/>
-                <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="100"/>
-                <ColumnDefinition Width="10"/>
-                <ColumnDefinition Width="75"/>
-                <ColumnDefinition Width="50"/>
-                <ColumnDefinition Width="100"/>
-                <ColumnDefinition Width="30"/>
                 <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="170"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="75"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="50"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="75"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="100"/>
+                <ColumnDefinition Width="100"/>
                 <ColumnDefinition Width="30"/>
             </Grid.ColumnDefinitions>
 
@@ -610,25 +822,36 @@
 
                 <TextBlock Text="Datum"
                            Foreground="LightGray"
-                           FontSize="12"
+                           FontSize="14"
+                           FontWeight="Medium"
                            FontFamily="Montserrat"
                            Margin="0,0,0,0"/>
 
-                <TextBox x:Name="txtDatum"
-                         FontSize="12"
-                         FontFamily="Montserrat"
-                         Foreground="White"
-                         CaretBrush="Lightgray"
-                         BorderBrush="Darkgray"
-                         BorderThickness="0,0,0,1"
-                         Height="15"
-                         VerticalContentAlignment="Center"
-                         Margin="0,10,0,0"
-                         Background="Transparent"/>
+                <xctk:DateTimeUpDown x:Name="DTPicker"
+                                     HorizontalAlignment="Left"
+                                     HorizontalContentAlignment="Right"
+                                     Width="125"
+                                     Height="26"
+                                     FontSize="14"
+                                     FontWeight="Light"
+                                     Format="ShortDate"
+                                     Foreground="White"
+                                     Background="Transparent"
+                                     Margin="0,3,0,0"
+                                     FormatString="dd.MM.yyyy"
+                                     Text="{Binding Kassenbuch.Datum, UpdateSourceTrigger=PropertyChanged}"
+                                     Watermark="01.01.2020" TabIndex="0">
 
+                    <xctk:DateTimeUpDown.BorderBrush>
+                        <SolidColorBrush Color="#FFABADB3" Opacity="100"/>
+                    </xctk:DateTimeUpDown.BorderBrush>
+
+                </xctk:DateTimeUpDown>
 
             </StackPanel>
 
+            <!--
+            
             <StackPanel Grid.Column="2"
                         Orientation="Vertical">
 
@@ -636,6 +859,9 @@
                             Margin="0,0,0,0">
 
                     <RadioButton Name="radioBtnEinnahme" 
+                                 FontSize="14"
+                                 FontWeight="Medium"
+                                 VerticalContentAlignment="Center"
                                  GroupName="EinnahmeAusgabe"
                                  Content="Einnahme"
                                  Foreground="LightGray"
@@ -648,61 +874,79 @@
 
                     <RadioButton Name="radioBtnAusgabe"
                                  GroupName="EinnahmeAusgabe"
+                                 FontSize="14"
+                                 FontWeight="Medium"
+                                 VerticalContentAlignment="Center"
                                  Content="Ausgabe"
                                  Foreground="LightGray"
                                  IsChecked="{Binding Kassenbuch.IsAusgabeSelected}"/>
 
                 </StackPanel>
 
+            </StackPanel> 
+            
+            -->
+
+            <StackPanel Grid.Column="2"
+                        Orientation="Vertical">
+
+                <TextBlock Text="Position"
+                           FontWeight="Medium"
+                           Foreground="LightGray"
+                           FontSize="14"
+                           FontFamily="Montserrat"
+                           Margin="0,0,0,0"/>
+
+                <ComboBox Name="cBoxPosition"
+                         BorderThickness="0.5"
+                         FontSize="14"
+                         FontWeight="Light"
+                         Height="26"
+                         Margin="0,3,0,0"
+                         Width="170"
+                         DisplayMemberPath="Name"
+                         ItemsSource="{Binding Kassenbuch.PositionenListe, UpdateSourceTrigger=PropertyChanged}"
+                         SelectedItem="{Binding Kassenbuch.Position, UpdateSourceTrigger=PropertyChanged}"
+                         HorizontalContentAlignment="Left"
+                         VerticalContentAlignment="Center" TabIndex="1">
+                    <ComboBox.BorderBrush>
+                        <SolidColorBrush Color="#FFABADB3" Opacity="0"/>
+                    </ComboBox.BorderBrush>
+                </ComboBox>
+
             </StackPanel>
 
             <StackPanel Grid.Column="4"
                         Orientation="Vertical">
 
-                <TextBlock Text="Position"
+                <TextBlock Text="Betrag"
                            Foreground="LightGray"
-                           FontSize="12"
+                           FontSize="14"
+                           FontWeight="Medium"
                            FontFamily="Montserrat"
                            Margin="0,0,0,0"/>
 
-               <ComboBox Name="cBoxPosition" 
-                         Height="14"
-                         Margin="0,6,0,0"
-                         Width="50"
-                         DisplayMemberPath="Name"
-                         ItemsSource="{Binding Kassenbuch.ComboBoxSource}"
-                         HorizontalContentAlignment="Left"
-                         VerticalContentAlignment="Center"/>
+                <xctk:DoubleUpDown x:Name="txtBetrag" 
+                                   ShowButtonSpinner="False"
+                                   AllowTextInput="True"
+                                   Foreground="White"
+                                   FontSize="14"
+                                   FontFamily="Montserrat"
+                                   FontWeight="Light"
+                                   Height="26"
+                                   Margin="0,3,0,0"
+                                   Background="Transparent"
+                                   BorderBrush="#FFABADB3"
+                                   FormatString="C2"
+                                   Value="{Binding Kassenbuch.Betrag, TargetNullValue='0.0', UpdateSourceTrigger=PropertyChanged}" TabIndex="2">
 
-            </StackPanel>
-
-            <StackPanel Grid.Column="6"
-                        Orientation="Vertical">
-
-                <TextBlock Name="txtBetrag" 
-                           Text="Betrag"
-                           Foreground="LightGray"
-                           FontSize="12"
-                           FontFamily="Montserrat"
-                           Margin="0,0,0,0"/>
-
-                <TextBox x:Name="sss"
-                         Text=""
-                         FontSize="12"
-                         FontFamily="Montserrat"
-                         Foreground="White"
-                         CaretBrush="Lightgray"
-                         BorderBrush="Darkgray"
-                         BorderThickness="0,0,0,1"
-                         Height="15"
-                         VerticalContentAlignment="Center"
-                         Margin="0,10,0,0"
-                         Background="Transparent"/>
+                </xctk:DoubleUpDown>
 
             </StackPanel>
 
             <StackPanel Grid.Column="8"
-                        Orientation="Vertical">
+                        Orientation="Vertical"
+                        Margin="0,0,0,0">
 
                 <StackPanel Orientation="Horizontal"
                             Margin="0,0,0,0">
@@ -710,8 +954,10 @@
                     <RadioButton Name="radioBtnKonto"
                                  GroupName="KontoKasse"
                                  Content="Konto"
+                                 FontSize="14"
+                                 FontWeight="Medium"
                                  Foreground="LightGray"
-                                 IsChecked="True"/>
+                                 IsChecked="{Binding Kassenbuch.IsKontoSelected, UpdateSourceTrigger=PropertyChanged}" TabIndex="4"/>
 
                 </StackPanel>
 
@@ -719,57 +965,64 @@
                             Margin="0,10,0,0">
 
                     <RadioButton Name="radioBtnKasse"
+                                 FontSize="14"
+                                 FontWeight="Medium"
                                  GroupName="KontoKasse"
                                  Content="Kasse"
-                                 Foreground="LightGray"/>
+                                 Foreground="LightGray"
+                                 IsChecked="{Binding Kassenbuch.IsKasseSelected, UpdateSourceTrigger=PropertyChanged}" TabIndex="5"/>
 
                 </StackPanel>
 
             </StackPanel>
 
-            <StackPanel Grid.Column="10"
+            <StackPanel Grid.Column="6"
                         Orientation="Vertical">
 
-                <TextBlock Text="Belegnummer"
+                <TextBlock Text="Nr."
                            Foreground="LightGray"
-                           FontSize="12"
+                           FontSize="14"
+                           FontWeight="Medium"
                            FontFamily="Montserrat"
                            Margin="0,0,0,0"/>
 
-                <TextBox x:Name="txtBelegnummer"
-                         Text=""
-                         FontSize="12"
-                         FontFamily="Montserrat"
-                         Foreground="White"
-                         CaretBrush="Lightgray"
-                         BorderBrush="Darkgray"
-                         BorderThickness="0,0,0,1"
-                         Height="15"
-                         VerticalContentAlignment="Center"
-                         Margin="0,10,0,0"
-                         Background="Transparent"/>
+                <xctk:IntegerUpDown x:Name="txtBelegnummer" 
+                                   ShowButtonSpinner="False"
+                                   AllowTextInput="True"
+                                   Foreground="White"
+                                   FontSize="14"
+                                   FontFamily="Montserrat"
+                                   FontWeight="Light"
+                                   Height="26"
+                                   Margin="0,3,0,0"
+                                   Background="Transparent"
+                                   BorderBrush="#FFABADB3"
+                                   Value="{Binding Kassenbuch.Belegnummer, TargetNullValue='0', UpdateSourceTrigger=PropertyChanged}" TabIndex="3">
+
+                </xctk:IntegerUpDown>
 
             </StackPanel>
 
-            <StackPanel Grid.Column="12">
+            <StackPanel Grid.Column="10">
 
                 <Button x:Name="btnHinzufuegen"
                         BorderThickness="0"
                         Content="Hinzufügen"
                         HorizontalContentAlignment="Center"
+                        FontWeight="Medium"
                         Foreground="White"
-                        FontSize="12"
+                        FontSize="14"
                         FontFamily="Montserrat"
                         Cursor="Hand"
-                        Margin="0,7,0,0"
-                        Click="btnHinzufuegen_Click">
+                        Margin="0,10,0,0"
+                        Command="{Binding Kassenbuch.AddCommand}" TabIndex="6">
 
                     <Button.Style>
                         <Style TargetType="Button">
-                            <Setter Property="Background" Value="#a499dc"/>
+                            <Setter Property="Background" Value="#5e5299"/>
                             <Style.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
-                                    <Setter Property="Background" Value="#bcb6e2"/>
+                                    <Setter Property="Background" Value="#a099c3"/>
                                 </Trigger>
                             </Style.Triggers>
 
@@ -778,7 +1031,7 @@
 
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
-                            <Border Width="85" Height="25"
+                            <Border Width="100" Height="30"
                                     CornerRadius="0"
                                     Background="{TemplateBinding Background}">
                                 <ContentPresenter VerticalAlignment="Center"
@@ -790,22 +1043,23 @@
 
             </StackPanel>
 
-            <StackPanel Grid.Column="13">
+            <StackPanel Grid.Column="11">
 
                 <Button x:Name="btnLoeschen"
                         BorderThickness="0"
-                        Content="x"
+                        Content="Entfernen"
                         HorizontalContentAlignment="Center"
+                        FontWeight="Medium"
                         Foreground="White"
-                        FontSize="12"
+                        FontSize="14"
                         FontFamily="Montserrat"
                         Cursor="Hand"
-                        Margin="0,7,0,0"
-                        Click="btnLoeschen_Click">
+                        Margin="0,10,0,0"
+                        Command="{Binding Kassenbuch.DeleteCommand}" TabIndex="7">
 
                     <Button.Style>
                         <Style TargetType="Button">
-                            <Setter Property="Background" Value="#e2668d"/>
+                            <Setter Property="Background" Value="#b75372"/>
                             <Style.Triggers>
                                 <Trigger Property="IsMouseOver" Value="True">
                                     <Setter Property="Background" Value="#d796b5"/>
@@ -817,7 +1071,7 @@
 
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
-                            <Border Width="30" Height="25"
+                            <Border Width="85" Height="30"
                                     CornerRadius="0"
                                     Background="{TemplateBinding Background}">
                                 <ContentPresenter VerticalAlignment="Center"
@@ -829,18 +1083,20 @@
 
             </StackPanel>
 
-            <StackPanel Grid.Column="15">
+            <StackPanel Grid.Column="12" Grid.ColumnSpan="2">
 
                 <Button x:Name="btnHideColumns"
                         BorderThickness="0"
-                        Content="..."
+                        Content="👁"
                         HorizontalContentAlignment="Center"
+                        VerticalAlignment="Center"
                         Foreground="White"
-                        FontSize="12"
+                        FontSize="14"
+                        FontWeight="Medium"
                         FontFamily="Montserrat"
                         Cursor="Hand"
-                        Margin="0,7,0,0"
-                        Click="btnHideColumns_Click">
+                        Margin="0,10,0,0"
+                        Click="btnHideColumns_Click" TabIndex="8">
 
                     <Button.Style>
                         <Style TargetType="Button">
@@ -856,7 +1112,7 @@
 
                     <Button.Template>
                         <ControlTemplate TargetType="Button">
-                            <Border Width="30" Height="25"
+                            <Border Width="30" Height="30"
                                     CornerRadius="0"
                                     Background="{TemplateBinding Background}">
                                 <ContentPresenter VerticalAlignment="Center"
@@ -870,6 +1126,52 @@
 
         </Grid>
 
+        <Grid Grid.Row="6">
+
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" MaxWidth="80"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" MaxWidth="80"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" MaxWidth="80"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <TextBlock Text="St. I: Ideeller Bereich, Übungs- und Trainingsbereich"
+                   Grid.Column="0"
+                   x:Name="Infotext1"
+                   Foreground="LightGray"
+                   FontSize="12"
+                   FontFamily="Montserrat"
+                   Margin="0,30,0,0"/>
+
+            <TextBlock Text="St. II: Vermögensverwaltung"
+                   Grid.Column="2"
+                   x:Name="Infotext2"
+                   Foreground="LightGray"
+                   FontSize="12"
+                   FontFamily="Montserrat"
+                   Margin="0,30,0,0"/>
+
+            <TextBlock Text="St III: Zweckbetriebe, sportliche Veranstaltungen"
+                   Grid.Column="4"
+                   x:Name="Infotext3"
+                   Foreground="LightGray"
+                   FontSize="12"
+                   FontFamily="Montserrat"
+                   Margin="0,30,0,0"/>
+
+            <TextBlock Text="St. IV: Steuerpflichtiger, wirtschaftlicher Geschäftsbetrieb"
+                   Grid.Column="6"
+                   x:Name="Infotext4"
+                   Foreground="LightGray"
+                   FontSize="12"
+                   FontFamily="Montserrat"
+                   Margin="0,30,0,0"/>
+
+        </Grid>
+
     </Grid>
-    
+
 </UserControl>

@@ -27,7 +27,6 @@ namespace WPF_LoginForm.View.Pages
         public KassenbuchView()
         {
             InitializeComponent();
-            //_HomeViewModel = HomeViewModel.Instance;
             DataContext = new CombinedViewModel();
         }
        
@@ -38,22 +37,17 @@ namespace WPF_LoginForm.View.Pages
                 DataGridColumn column = dgKassenbuch.Columns[i];
                 column.Visibility = column.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
             }
+
+            //Infotext.Visibility = Infotext.Visibility == Visibility.Visible ? Visibility.Collapsed : Visibility.Visible;
             
-        }
-
-        private void btnHinzufuegen_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void btnLoeschen_Click(object sender, RoutedEventArgs e)
-        {
-
-        }
-
-        private void cBoxPosition_ContextMenuOpening(object sender, ContextMenuEventArgs e)
-        {
-
+            if (Infozeile.Height.Value == 0)
+            {
+                Infozeile.Height = new GridLength(50); // Setze die Höhe auf den gewünschten Wert
+            }
+            else
+            {
+                Infozeile.Height = new GridLength(0); // Blende die Zeile aus
+            }
         }
     }
 }

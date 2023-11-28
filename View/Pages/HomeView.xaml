@@ -308,7 +308,7 @@
 
             <StackPanel Grid.Column="1">
                 <TextBlock Text="Vereinsverwaltung"
-                               Foreground="White"
+                               Foreground="#e2e3f2"
                                FontSize="50"
                                FontWeight="Medium"
                                FontFamily="Montserrat"
@@ -317,7 +317,7 @@
                                Margin="0,10,0,0"/>
 
                 <TextBlock Text="Kassenbücher, Kassenberichte, Mitgliedsbeiträge"
-                               Foreground="White"
+                               Foreground="#e2e3f2"
                                FontSize="40"
                                FontWeight="Light"
                                FontFamily="Montserrat"
@@ -348,7 +348,7 @@
                 <StackPanel Grid.Column="1">
 
                     <TextBlock Text="____________________________________________________________________"
-                               Foreground="White"
+                               Foreground="#e2e3f2"
                                FontSize="30"
                                FontWeight="ExtraLight"
                                FontFamily="Montserrat"
@@ -357,7 +357,7 @@
                                Margin="0,0,0,0"/>
 
                     <TextBlock Text="Projektverwaltung"
-                                   Foreground="White"
+                                   Foreground="#e2e3f2"
                                TextWrapping="Wrap"
                                    FontSize="40"
                                    FontWeight="ExtraLight"
@@ -382,7 +382,7 @@
                 <StackPanel Grid.Column="2">
 
                     <TextBlock Text="Projekt öffnen:"
-                                   Foreground="White"
+                                   Foreground="#e2e3f2"
                                    TextWrapping="Wrap"
                                    FontSize="20"
                                    FontWeight="Light"
@@ -396,14 +396,13 @@
                                   ItemsSource="{Binding Projects}"
                                   SelectedItem="{Binding AktuellesProjekt, Mode=TwoWay}"
                                   Name="cboxAktuellesProjekt"
-                                  DisplayMemberPath="Name"
                                   HorizontalAlignment="Left"
                                   Margin="0,15,0,0"
                                   FontFamily="Montserrat"
                                   FontWeight="Light"
                                   FontSize="20"
                                   VerticalContentAlignment="Center"
-                                  HorizontalContentAlignment="Center" BorderBrush="{DynamicResource color5}" Foreground="Black"/>
+                                  HorizontalContentAlignment="Center" BorderBrush="{DynamicResource color5}" Foreground="Black" TabIndex="1"/>
                        
                     </StackPanel>
 
@@ -412,7 +411,7 @@
                 <StackPanel Grid.Column="3">
 
                     <TextBlock Text="Neues Projekt:"
-                                   Foreground="White"
+                                   Foreground="#e2e3f2"
                                    TextWrapping="Wrap"
                                    FontSize="20"
                                    FontWeight="Light"
@@ -435,7 +434,7 @@
                                             FontSize="20"
                                             FontFamily="Montserrat"
                                             FontWeight="Light"
-                                            TextAlignment="Center"/>
+                                            TextAlignment="Center" TabIndex="2"/>
 
                         <Button Name="btnCreateTable"
                                 Margin="10,15,0,0"
@@ -449,7 +448,7 @@
                                 Cursor="Hand"
                                 BorderThickness="0"
                                 Foreground="black"
-                                VerticalAlignment="Bottom">
+                                VerticalAlignment="Bottom" TabIndex="3">
                             
                         </Button>
 
@@ -460,7 +459,7 @@
                 <StackPanel Grid.Column="1">
 
                     <TextBlock Text="Aktuelles Projekt:"
-                                   Foreground="White"
+                                   Foreground="#e2e3f2"
                                    TextWrapping="Wrap"
                                    FontSize="20"
                                    FontWeight="Light"
@@ -474,7 +473,7 @@
                                FontWeight="Medium"
                                FontSize="20"
                                Margin="0,15,0,0"
-                               Text="{Binding AktuellesProjekt.Name, Mode=OneWay}"
+                               Text="{Binding AktuellesProjekt, Mode=OneWay}"
                                TextAlignment="Center"
                                Padding="4"
                                HorizontalAlignment="Left" Background="#bbb"/>
@@ -494,7 +493,7 @@
                 <StackPanel Grid.Column="1">
 
                     <TextBlock Text="____________________________________________________________________"
-                               Foreground="White"
+                               Foreground="#e2e3f2"
                                FontSize="30"
                                FontWeight="ExtraLight"
                                FontFamily="Montserrat"

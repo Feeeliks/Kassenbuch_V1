@@ -4,9 +4,115 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:WPF_LoginForm.View.Pages"
+             xmlns:fa="http://schemas.awesome.incremented/wpf/xaml/fontawesome.sharp" 
              mc:Ignorable="d" 
+             xmlns:viewModelPage="clr-namespace:WPF_LoginForm.ViewModels.Pages"
+             d:DataContext="{d:DesignInstance Type=viewModelPage:CombinedViewModel}"
              d:DesignHeight="450" d:DesignWidth="800">
+
     <Grid>
-            
+
+        <Grid.RowDefinitions>
+            <RowDefinition Height="35"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="100"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+
+        <Button HorizontalAlignment="Left" 
+                Grid.Row="1" 
+                BorderThickness="0"
+                Background="Transparent"
+                Width="450"
+                HorizontalContentAlignment="Left"
+                Command="{Binding Export.ExportKassenbuchCommand}"
+                Margin="25,0,0,0" TabIndex="1">
+
+            <StackPanel Orientation="Horizontal">
+                <fa:IconImage Icon="Book" 
+                              Width="40" 
+                              Height="40" 
+                              Foreground="White"
+                              Margin="50,0,0,0"/>
+                <TextBlock Text="Kassenbuch"
+                           Foreground="White"
+                           FontFamily="Montserrat"
+                           FontSize="40"
+                           VerticalAlignment="Center"
+                           Margin="25,5,0,0"/>
+            </StackPanel>
+        </Button>
+
+        <Button HorizontalAlignment="Left" 
+                Grid.Row="2" 
+                BorderThickness="0"
+                Background="Transparent"
+                Width="450"
+                HorizontalContentAlignment="Left"
+                Command="{Binding Export.ExportKassenberichtCommand}"
+                Margin="25,0,0,0" TabIndex="2">
+            <StackPanel Orientation="Horizontal">
+                <fa:IconImage Icon="PieChart" 
+                              Width="40" 
+                              Height="40" 
+                              Foreground="White"
+                              Margin="50,0,0,0"/>
+                <TextBlock Text="Kassenbericht"
+                           Foreground="White"
+                           FontFamily="Montserrat"
+                           FontSize="40"
+                           VerticalAlignment="Center"
+                           Margin="25,5,0,0"/>
+            </StackPanel>
+        </Button>
+
+        <Button HorizontalAlignment="Left" 
+                Grid.Row="3" 
+                BorderThickness="0"
+                Background="Transparent"
+                Width="450"
+                HorizontalContentAlignment="Left"
+                Command="{Binding Export.ExportKassenprüfberichtCommand}"
+                Margin="25,0,0,0" TabIndex="3">
+            <StackPanel Orientation="Horizontal">
+                <fa:IconImage Icon="ListCheck" 
+                              Width="40" 
+                              Height="40" 
+                              Foreground="White"
+                              Margin="50,0,0,0"/>
+                <TextBlock Text="Kassenprüfbericht"
+                           Foreground="White"
+                           FontFamily="Montserrat"
+                           FontSize="40"
+                           VerticalAlignment="Center"
+                           Margin="25,5,0,0"/>
+            </StackPanel>
+        </Button>
+
+        <Button HorizontalAlignment="Left" 
+                Grid.Row="4" 
+                BorderThickness="0"
+                Background="Transparent"
+                Width="450"
+                HorizontalContentAlignment="Left"
+                Margin="25,0,0,0" TabIndex="4">
+            <StackPanel Orientation="Horizontal">
+                <fa:IconImage Icon="UserGroup" 
+                              Width="40" 
+                              Height="40" 
+                              Foreground="White"
+                              Margin="50,0,0,0"/>
+                <TextBlock Text="Mitgliederliste"
+                           Foreground="White"
+                           FontFamily="Montserrat"
+                           FontSize="40"
+                           VerticalAlignment="Center"
+                           Margin="25,5,0,0"/>
+            </StackPanel>
+        </Button>
+
     </Grid>
+
 </UserControl>

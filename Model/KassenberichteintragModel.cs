@@ -6,11 +6,11 @@ using System.Threading.Tasks;
 
 namespace WPF_LoginForm.Model
 {
-    public class PositionModel
+    class KassenberichteintragModel
     {
-        public string Name { get; set; }
+        public int Id { get; set; }
+        public string Gruppe { get; set; }
+        public double Betrag { get; set; }
         public string EinnahmeAusgabe { get; set; }
-        public int Steuerklasse { get; set; }
-        public string KassenberichtGruppe { get; set; }
     }
 }

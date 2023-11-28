@@ -21,18 +21,15 @@ namespace WPF_LoginForm.View.Pages
     /// </summary>
     public partial class HomeView : UserControl
     {
-        private HomeViewModel _viewModel;
-
         public HomeView()
         {
             InitializeComponent();
-            _viewModel = HomeViewModel.Instance;
-            DataContext = _viewModel;
+            DataContext = HomeViewModel.Instance;
         }
 
         private void cboxOpenProject_SelectionChanged (object sender, RoutedEventArgs e)
         {
-            _viewModel.AktuellesProjekt = ((ComboBoxItem)cboxAktuellesProjekt.SelectedItem).Name;
+            HomeViewModel.Instance.AktuellesProjekt = ((ComboBoxItem)cboxAktuellesProjekt.SelectedItem).Content.ToString();
         }
     }
 }

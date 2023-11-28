@@ -18,9 +18,10 @@ namespace WPF_LoginForm.ViewModels.Pages
         {
             //Fields
             private static HomeViewModel instance;
-            private object _aktuellesProjekt;
+            private string _aktuellesProjekt;
+            private string _vorherigesProjekt;
             private string _createTableName;
-            private List<ProjectModel> _projects;
+            private List<string> _projects;
 
             //Singleton
             public static HomeViewModel Instance
@@ -35,7 +36,12 @@ namespace WPF_LoginForm.ViewModels.Pages
                 }
             }
 
-            //Properties
+        //Properties
+            public ExportViewModel Export { get; set; }
+            public EinstellungenViewModel Einstellungen { get; set; }
+
+            public MitgliederViewModel Mitglieder { get; set; }
+
             public string CreateTableName
             {
                 get { return _createTableName; }
@@ -46,52 +52,68 @@ namespace WPF_LoginForm.ViewModels.Pages
                 }
             }
 
-            public List<ProjectModel> Projects
+            public List<string> Projects
             {
                 get { return _projects; }
                 set { _projects = value; OnPropertyChanged(nameof(Projects)); }
             }
 
-            public object AktuellesProjekt
+            public string AktuellesProjekt
             {
                 get { return _aktuellesProjekt; }
                 set
                 {
                     _aktuellesProjekt = value;
                     OnPropertyChanged(nameof(AktuellesProjekt));
-                
+                    KassenbuchViewModel.Instance.LoadKassenbuch(AktuellesProjekt);
+                    MitgliederViewModel.Instance.LoadMitglieder();
+                    EinstellungenViewModel.Instance.LoadKassenpruefer();
+                }
             }
+
+            public string VorherigesProjekt
+            {
+                get { return Convert.ToString(Convert.ToInt32(_aktuellesProjekt) - 1); }
+                set
+                {
+                    _vorherigesProjekt = value;
+                    OnPropertyChanged(nameof(VorherigesProjekt));
+                }
             }
 
             //Commands
             public ICommand CreateTableCommand { get; }
 
             //Methods
-            private void LoadProjects()
+            public void LoadProjects()
             {
-                using (SQLiteConnection connection = new SQLiteConnection("Data Source=database.db;Version=3;"))
+            using (SQLiteConnection connection = new SQLiteConnection("Data Source=database.db;Version=3;"))
+            {
+                connection.Open();
+                using (SQLiteCommand command = new SQLiteCommand("SELECT Name FROM Projekte", connection))
                 {
-                    connection.Open();
-                    using (SQLiteCommand command = new SQLiteCommand("SELECT * FROM Projekte", connection))
+                    SQLiteDataReader reader = command.ExecuteReader();
+                    _projects = new List<string>();
+                    while (reader.Read())
                     {
-                        SQLiteDataReader reader = command.ExecuteReader();
-                        _projects = new List<ProjectModel>();
-                        while (reader.Read())
-                        {
-                            int id = Convert.ToInt32(reader["ID"]);
-                            int name = Convert.ToInt32(reader["Name"]);
-                            _projects.Add(new ProjectModel { ID = id, Name = name });
-                        }
+                        string name = Convert.ToString(reader["Name"]);
+                        _projects.Add(name);
                     }
                 }
             }
+            OnPropertyChanged(nameof(Projects));
+            }
 
-            public int PreviousProjectName
+            private bool TableExists(SQLiteConnection connection, string tableName)
             {
-                get
+                string sql = "SELECT name FROM sqlite_master WHERE type='table' AND name=@tableName";
+                using (SQLiteCommand command = new SQLiteCommand(sql, connection))
                 {
-                    ProjectModel project = (ProjectModel)_aktuellesProjekt;
-                    return project.PreviousProject();
+                    command.Parameters.AddWithValue("@tableName", tableName);
+                    using (SQLiteDataReader reader = command.ExecuteReader())
+                    {
+                        return reader.HasRows;
+                    }
                 }
             }
 
@@ -101,25 +123,65 @@ namespace WPF_LoginForm.ViewModels.Pages
                 {
                     connection.Open();
 
-                    string sql1 = "CREATE TABLE IF NOT EXISTS \"" + CreateTableName + "_Mitglieder\" (" +
-                        "ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, " +
-                        "Geburtsdatum TEXT NOT NULL, " +
-                        "Nachname TEXT NOT NULL, " +
-                        "Vorname TEXT NOT NULL, " +
-                        "Mitgliedsstatus TEXT NOT NULL, " +
-                        "Beitrag TEXT NOT NULL, " +
-                        "Zahlstatus TEXT NOT NULL)";
+                    string sourceTableName = (int.Parse(CreateTableName) + 1).ToString();
+                    string targetTableName = CreateTableName + "_Mitglieder";
+
+                    string sql1;
+
+                    if (TableExists(connection, sourceTableName))
+                    {
+                        // Kopiere Daten aus der Quelltabelle und ändere den Bezahlstatus
+                        sql1 = "INSERT INTO \"" + targetTableName + "\" (Vorname, Nachname, Mitgliedsstatus, Mitgliedsbeitrag, Bezahlstatus) " +
+                            "SELECT Vorname, Nachname, Mitgliedsstatus, Mitgliedsbeitrag, 'offen' FROM \"" + sourceTableName + "\"";
+                    }
+                    else
+                    {
+                        // Erstelle eine leere Tabelle mit den angegebenen Spalten
+                        sql1 = "CREATE TABLE IF NOT EXISTS \"" + targetTableName + "\" (" +
+                            "Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, " +
+                            "Vorname TEXT NOT NULL, " +
+                            "Nachname TEXT NOT NULL, " +
+                            "Mitgliedsstatus TEXT NOT NULL, " +
+                            "Mitgliedsbeitrag REAL NOT NULL, " +
+                            "Bezahlstatus TEXT NOT NULL DEFAULT 'offen')";
+                    }
 
                     string sql2 = "CREATE TABLE IF NOT EXISTS \"" + CreateTableName + "_Kassenbuch\" (" +
-                        "ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, " +
+                        "Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, " +
                         "Datum TEXT NOT NULL, " +
-                        "Buchungsnummer INTEGER NOT NULL, " +
                         "Position TEXT NOT NULL, " +
-                        "KontoKasse TEXT NOT NULL, " +
-                        "EinnahmeAusgabe TEXT NOT NULL, " +
-                        "Steuerklasse INTEGER NOT NULL)";
+                        "Kontobeleg TEXT, " +
+                        "Belegnummer INTEGER NOT NULL, " +
+                        "Betrag REAL NOT NULL, " +
+                        "KontoEinnahme REAL, " +
+                        "KontoAusgabe REAL, " +
+                        "KasseEinnahme REAL, " +
+                        "KasseAusgabe REAL, " +
+                        "Steuer1Einnahme REAL, " +
+                        "Steuer1Ausgabe REAL, " +
+                        "Steuer2Einnahme REAL, " +
+                        "Steuer2Ausgabe REAL, " +
+                        "Steuer3Einnahme REAL, " +
+                        "Steuer3Ausgabe REAL, " +
+                        "Steuer4Einnahme REAL, " +
+                        "Steuer4Ausgabe REAL, " +
+                        "Gruppe TEXT NOT NULL)";
 
                     string sql3 = "INSERT INTO Projekte (Name) VALUES (@Name)";
+
+                    string sql4 = "CREATE TABLE IF NOT EXISTS \"" + CreateTableName + "_Kassenbestand\" (" +
+                        "Id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, " +
+                        "Gesamtbestand REAL NOT NULL, " +
+                        "Kontobestand REAL NOT NULL, " +
+                        "Handkassenbestand REAL NOT NULL, " +
+                        "Ausschankkassenbestand REAL NOT NULL);" +
+                        "INSERT INTO \"" + CreateTableName + "_Kassenbestand\" (Gesamtbestand, Kontobestand, Handkassenbestand, Ausschankkassenbestand) VALUES (0.00, 0.00, 0.00, 350.00)";
+
+                    string sql5 = "CREATE TABLE IF NOT EXISTS \"" + CreateTableName + "_Kassenbericht\" (" +
+                        "ID INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL UNIQUE, " +
+                        "Gruppe TEXT NOT NULL, " +
+                        "Betrag REAL NOT NULL, " +
+                        "EinnahmeAusgabe TEXT NOT NULL)";
 
                     using (SQLiteCommand command = new SQLiteCommand(sql1, connection))
                     {
@@ -136,9 +198,20 @@ namespace WPF_LoginForm.ViewModels.Pages
                         command.Parameters.AddWithValue("@Name", CreateTableName);
                         command.ExecuteNonQuery();
                     }
-                }
 
+                    using (SQLiteCommand command = new SQLiteCommand(sql4, connection))
+                    {
+                        command.ExecuteNonQuery();
+                    }
+
+                    using (SQLiteCommand command = new SQLiteCommand(sql5, connection))
+                    {
+                        command.ExecuteNonQuery();
+                    }
+                }
                 MessageBox.Show("Projekt erfolgreich erstellt", "Erfolgreich", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                LoadProjects();
+                EinstellungenViewModel.Instance.LoadProjekte();   
             }
 
             private bool CanExecuteCreateTable(object obj)
@@ -172,9 +245,10 @@ namespace WPF_LoginForm.ViewModels.Pages
             //Constructor
             public HomeViewModel()
             {
-                CreateTableCommand = new ViewModelCommand(ExecuteCreateTable, CanExecuteCreateTable);
+                Export = ExportViewModel.Instance;
+                Einstellungen = EinstellungenViewModel.Instance;
                 LoadProjects();
-                _aktuellesProjekt = _projects[Projects.Count - 1];
+                CreateTableCommand = new ViewModelCommand(ExecuteCreateTable, CanExecuteCreateTable);
             }
         }
 }
